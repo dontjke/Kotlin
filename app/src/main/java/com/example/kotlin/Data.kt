@@ -1,4 +1,4 @@
 package com.example.kotlin
 
-data class Data(val title: String, val description: String)
+data class Data(var title: String = "Title1", var description: String = "Description1")
 
