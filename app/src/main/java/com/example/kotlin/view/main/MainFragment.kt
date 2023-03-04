@@ -1,4 +1,4 @@
-package com.example.kotlin.view
+package com.example.kotlin.view.main
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -25,7 +25,7 @@ class MainFragment : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance(param1: String, param2: String) = MainFragment()
+        fun newInstance() = MainFragment()
 
     }
 }
