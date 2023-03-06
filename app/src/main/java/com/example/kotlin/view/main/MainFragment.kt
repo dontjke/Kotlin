@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.kotlin.R
 import com.example.kotlin.databinding.FragmentMainBinding
+import com.example.kotlin.viewmodel.AppState
 import com.example.kotlin.viewmodel.MainViewModel
 
 class MainFragment : Fragment() {
@@ -36,12 +37,12 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.buttonOne.setOnClickListener {}
+       // binding.buttonOne.setOnClickListener {}
 
 
         val viewModel = ViewModelProvider(this)[MainViewModel::class.java]
-        val observer = object : Observer<Any> {
-            override fun onChanged(data: Any) {
+        val observer = object : Observer<AppState> {
+            override fun onChanged(data: AppState) {
                 renderData(data)
             }
         }
@@ -50,8 +51,21 @@ class MainFragment : Fragment() {
         viewModel.getWeather()
     }
 
-    private fun renderData(data: Any) {
-        Toast.makeText(requireContext(), "Работает", Toast.LENGTH_SHORT).show()
+    private fun renderData(data: AppState) {
+        when (data){
+            is AppState.Error -> {
+                binding.loadingLayout.visibility = View.GONE
+                binding.message.text = "Не получилось ${data.error}"
+            }
+
+            is AppState.Loading -> binding.loadingLayout.visibility = View.VISIBLE
+            is AppState.Success -> {
+                binding.loadingLayout.visibility = View.GONE
+                binding.message.text = "Получилось"
+               // Toast.makeText(requireContext(), "Работает", Toast.LENGTH_SHORT).show()
+            }
+
+        }
     }
 
     companion object {
