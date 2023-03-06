@@ -12,6 +12,7 @@ import com.example.kotlin.R
 import com.example.kotlin.databinding.FragmentMainBinding
 import com.example.kotlin.viewmodel.AppState
 import com.example.kotlin.viewmodel.MainViewModel
+import com.google.android.material.snackbar.Snackbar
 
 class MainFragment : Fragment() {
 
@@ -56,12 +57,14 @@ class MainFragment : Fragment() {
             is AppState.Error -> {
                 binding.loadingLayout.visibility = View.GONE
                 binding.message.text = "Не получилось ${data.error}"
+                Snackbar.make(binding.mainView,"Не получилось",Snackbar.LENGTH_LONG).show()
             }
 
             is AppState.Loading -> binding.loadingLayout.visibility = View.VISIBLE
             is AppState.Success -> {
                 binding.loadingLayout.visibility = View.GONE
                 binding.message.text = "Получилось"
+                Snackbar.make(binding.mainView,"Получилось",Snackbar.LENGTH_LONG).show()
                // Toast.makeText(requireContext(), "Работает", Toast.LENGTH_SHORT).show()
             }
 
