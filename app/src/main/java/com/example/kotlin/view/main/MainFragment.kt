@@ -5,10 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.kotlin.R
 import com.example.kotlin.databinding.FragmentMainBinding
 import com.example.kotlin.viewmodel.AppState
 import com.example.kotlin.viewmodel.MainViewModel
@@ -16,11 +14,15 @@ import com.google.android.material.snackbar.Snackbar
 
 class MainFragment : Fragment() {
 
-    lateinit var binding: FragmentMainBinding //утечка памяти
+    private var _binding: FragmentMainBinding? = null //убрали утечку памяти
+    private val binding: FragmentMainBinding
+        get() {
+            return _binding!!
+        }
 
     override fun onDestroy() {
         super.onDestroy()
-       // binding = null     след занятие
+        _binding = null
     }
 
 
@@ -28,7 +30,7 @@ class MainFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentMainBinding.inflate(inflater, container, false)
+        _binding = FragmentMainBinding.inflate(inflater, container, false)
 
         // Inflate the layout for this fragment
         // return inflater.inflate(R.layout.fragment_main, container, false)
@@ -38,7 +40,7 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-       // binding.buttonOne.setOnClickListener {}
+        // binding.buttonOne.setOnClickListener {}
 
 
         val viewModel = ViewModelProvider(this)[MainViewModel::class.java]
@@ -53,11 +55,11 @@ class MainFragment : Fragment() {
     }
 
     private fun renderData(data: AppState) {
-        when (data){
+        when (data) {
             is AppState.Error -> {
                 binding.loadingLayout.visibility = View.GONE
-               // binding.message.text = "Не получилось ${data.error}"
-                Snackbar.make(binding.mainView,"Не получилось",Snackbar.LENGTH_LONG).show()
+                // binding.message.text = "Не получилось ${data.error}"
+                Snackbar.make(binding.mainView, "Не получилось", Snackbar.LENGTH_LONG).show()
             }
 
             is AppState.Loading -> binding.loadingLayout.visibility = View.VISIBLE
@@ -66,9 +68,10 @@ class MainFragment : Fragment() {
                 binding.cityName.text = data.weatherData.city.name
                 binding.temperatureValue.text = data.weatherData.temperature.toString()
                 binding.feelsLikeValue.text = data.weatherData.feelsLike.toString()
-                binding.cityCoordinates.text = "${data.weatherData.city.lat} ${data.weatherData.city.lon}"
-                Snackbar.make(binding.mainView,"Получилось",Snackbar.LENGTH_LONG).show()
-               // Toast.makeText(requireContext(), "Работает", Toast.LENGTH_SHORT).show()
+                binding.cityCoordinates.text =
+                    "${data.weatherData.city.lat} ${data.weatherData.city.lon}"
+                Snackbar.make(binding.mainView, "Получилось", Snackbar.LENGTH_LONG).show()
+                // Toast.makeText(requireContext(), "Работает", Toast.LENGTH_SHORT).show()
             }
 
         }
