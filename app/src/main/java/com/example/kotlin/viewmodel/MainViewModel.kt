@@ -3,9 +3,8 @@ package com.example.kotlin.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.kotlin.repository.Repository
 import com.example.kotlin.repository.RepositoryImpl
-import java.lang.Thread.sleep
+
 
 class MainViewModel(
     private val liveData: MutableLiveData<AppState> = MutableLiveData(),
@@ -16,18 +15,18 @@ class MainViewModel(
         return liveData
     }
 
-    fun getWeather() {
+    fun getWeatherRussia() = getWeather(true)
+    fun getWeatherWorld() = getWeather(false)
+    private fun getWeather(isRussian: Boolean) {
         Thread {
             liveData.postValue(AppState.Loading)
-
-            if ((0..10).random() > 5) {
-                val answer = repository.getWeatherFromServer()
-                //TODO
+            if (true) {
+                val answer =
+                    if (!isRussian) repository.getWeatherFromLocalStorageWorld() else repository.getWeatherFromLocalStorageRus()
                 liveData.postValue(AppState.Success(answer))
             } else {
                 liveData.postValue(AppState.Error(IllegalAccessException()))
             }
-
         }.start()
 
     }
