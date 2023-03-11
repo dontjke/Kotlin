@@ -9,6 +9,7 @@ import com.example.kotlin.databinding.FragmentDetailsBinding
 import com.example.kotlin.repository.Weather
 import com.example.kotlin.utils.KEY_BUNDLE_WEATHER
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.snackbar.Snackbar.make
 
 class DetailsFragment : Fragment() {
 
@@ -32,23 +33,30 @@ class DetailsFragment : Fragment() {
         return binding.root
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val weather: Weather = requireArguments().getParcelable<Weather>(KEY_BUNDLE_WEATHER)!!
-        renderData(weather)
+        arguments?.getParcelable<Weather>(KEY_BUNDLE_WEATHER)?.let {
+            renderData(it)
+        }
 
     }
 
     private fun renderData(weather: Weather) {
-
-        binding.loadingLayout.visibility = View.GONE
-        binding.cityNameTextView.text = weather.city.name
-        binding.temperatureValue.text = weather.temperature.toString()
-        binding.feelsLikeValue.text = weather.feelsLike.toString()
-        binding.cityCoordinates.text =
-            "${weather.city.lat} ${weather.city.lon}"
-        Snackbar.make(binding.mainView, "Получилось", Snackbar.LENGTH_LONG).show()
+        with(binding) {
+            loadingLayout.visibility = View.GONE
+            cityNameTextView.text = weather.city.name
+            temperatureValue.text = weather.temperature.toString()
+            feelsLikeValue.text = weather.feelsLike.toString()
+            cityCoordinates.text = "${weather.city.lat} ${weather.city.lon}"
+            showSnackBar("Получилось", mainView)
+        }
+        // Snackbar.make(binding.mainView, "Получилось", Snackbar.LENGTH_LONG).show()
     }
+
+    private fun showSnackBar(string: String, view: View) =
+        make(view, string, Snackbar.LENGTH_LONG).show()
+
 
     companion object {
         @JvmStatic

@@ -6,8 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kotlin.R
 import com.example.kotlin.databinding.FragmentWeatherListBinding
 import com.example.kotlin.repository.Weather
@@ -39,23 +39,27 @@ class WeatherListFragment : Fragment(), OnItemClickListener {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentWeatherListBinding.inflate(inflater, container, false)
-
         return binding.root
     }
 
     private var isRussian = true
+    private val viewModel: MainViewModel by lazy {  //вызывается по требованию, ленивое свойство, отложенная реализация
+        ViewModelProvider(this)[MainViewModel::class.java]
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.recyclerView.adapter = adapter
-        val viewModel = ViewModelProvider(this)[MainViewModel::class.java]
-        val observer = object : Observer<AppState> {
-            override fun onChanged(data: AppState) {
-                renderData(data)
-            }
+        binding.recyclerView.also {
+            it.adapter = adapter
+            it.layoutManager = LinearLayoutManager(requireContext())
         }
+        val observer = { data: AppState -> renderData(data) }
         viewModel.getData().observe(viewLifecycleOwner, observer)
+        setupFab()
+        viewModel.getWeatherRussia()
+    }
 
+    private fun setupFab() {
         binding.floatingActionButton.setOnClickListener {
             isRussian = !isRussian
             if (isRussian) {
@@ -77,7 +81,6 @@ class WeatherListFragment : Fragment(), OnItemClickListener {
                 )
             }
         }
-        viewModel.getWeatherRussia()
     }
 
     private fun renderData(data: AppState) {
@@ -101,11 +104,11 @@ class WeatherListFragment : Fragment(), OnItemClickListener {
     }
 
     override fun onItemClick(weather: Weather) {
-        val bundle = Bundle()
-        bundle.putParcelable(KEY_BUNDLE_WEATHER, weather)
         requireActivity().supportFragmentManager
             .beginTransaction()
-            .add(R.id.container, DetailsFragment.newInstance(bundle))
+            .add(R.id.container, DetailsFragment.newInstance(Bundle().apply {
+                putParcelable(KEY_BUNDLE_WEATHER, weather)
+            }))
             .addToBackStack("")
             .commit()
     }
