@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kotlin.R
 import com.example.kotlin.databinding.FragmentWeatherListBinding
 import com.example.kotlin.repository.Weather
@@ -42,14 +43,23 @@ class WeatherListFragment : Fragment(), OnItemClickListener {
     }
 
     private var isRussian = true
+    private val viewModel: MainViewModel by lazy {  //вызывается по требованию, ленивое свойство, отложенная реализация
+        ViewModelProvider(this)[MainViewModel::class.java]
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.recyclerView.adapter = adapter
-        val viewModel = ViewModelProvider(this)[MainViewModel::class.java]
+        binding.recyclerView.also {
+            it.adapter = adapter
+            it.layoutManager = LinearLayoutManager(requireContext())
+        }
         val observer = { data: AppState -> renderData(data) }
         viewModel.getData().observe(viewLifecycleOwner, observer)
+        setupFab()
+        viewModel.getWeatherRussia()
+    }
 
+    private fun setupFab() {
         binding.floatingActionButton.setOnClickListener {
             isRussian = !isRussian
             if (isRussian) {
@@ -71,7 +81,6 @@ class WeatherListFragment : Fragment(), OnItemClickListener {
                 )
             }
         }
-        viewModel.getWeatherRussia()
     }
 
     private fun renderData(data: AppState) {
