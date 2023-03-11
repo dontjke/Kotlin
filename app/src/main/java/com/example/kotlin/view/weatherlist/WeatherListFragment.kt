@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.kotlin.R
 import com.example.kotlin.databinding.FragmentWeatherListBinding
@@ -49,11 +48,7 @@ class WeatherListFragment : Fragment(), OnItemClickListener {
         super.onViewCreated(view, savedInstanceState)
         binding.recyclerView.adapter = adapter
         val viewModel = ViewModelProvider(this)[MainViewModel::class.java]
-        val observer = object : Observer<AppState> {
-            override fun onChanged(data: AppState) {
-                renderData(data)
-            }
-        }
+        val observer =  {data: AppState -> renderData(data) }
         viewModel.getData().observe(viewLifecycleOwner, observer)
 
         binding.floatingActionButton.setOnClickListener {
