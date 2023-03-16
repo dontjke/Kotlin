@@ -48,7 +48,7 @@ class MainActivityWebView : AppCompatActivity() {
 
     }
 
-    private fun getLinesAsOneBigText(bufferedReader: BufferedReader): String {
+    private fun getLinesAsOneBigText(bufferedReader: BufferedReader): String {  //конвертер в строку
         return bufferedReader.lines().collect(Collectors.joining("\n"))
     }
 }
