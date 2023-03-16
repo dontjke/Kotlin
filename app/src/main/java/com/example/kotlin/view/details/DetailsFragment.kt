@@ -6,15 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.kotlin.databinding.FragmentDetailsBinding
-import com.example.kotlin.repository.OnServerResponse
-import com.example.kotlin.repository.Weather
-import com.example.kotlin.repository.WeatherDTO
-import com.example.kotlin.repository.WeatherLoader
+import com.example.kotlin.repository.*
 import com.example.kotlin.utils.KEY_BUNDLE_WEATHER
+import com.example.kotlin.viewmodel.ResponseState
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.snackbar.Snackbar.make
 
-class DetailsFragment : Fragment(), OnServerResponse {
+class DetailsFragment : Fragment(), OnServerResponse, OnServerResponseListener{
 
     private var _binding: FragmentDetailsBinding? = null //убрали утечку памяти
     private val binding: FragmentDetailsBinding
@@ -43,7 +41,7 @@ class DetailsFragment : Fragment(), OnServerResponse {
         arguments?.getParcelable<Weather>(KEY_BUNDLE_WEATHER)?.let {
             currentCityName = it.city.name
             // Thread{
-            WeatherLoader(this@DetailsFragment).loadWeather(it.city.lat, it.city.lon)
+            WeatherLoader(this@DetailsFragment,this@DetailsFragment).loadWeather(it.city.lat, it.city.lon)
             // }.start()
         }
     }
@@ -76,4 +74,10 @@ class DetailsFragment : Fragment(), OnServerResponse {
     override fun onResponse(weatherDTO: WeatherDTO) {
         renderData(weatherDTO)
     }
+
+    override fun onError(error: ResponseState) {
+        //TODO выводим ошибку
+    }
+
+
 }

@@ -12,7 +12,7 @@ import java.net.URL
 
 import javax.net.ssl.HttpsURLConnection
 
-class WeatherLoader(private val onServerResponseListener: OnServerResponse) {
+class WeatherLoader(private val onServerResponseListener: OnServerResponse, private val onErrorListener: OnServerResponseListener) {
     fun loadWeather(lat: Double, lon: Double) {
 
         val urlText =
@@ -29,6 +29,13 @@ class WeatherLoader(private val onServerResponseListener: OnServerResponse) {
 
                 val headers = urlConnection.headerFields
                 val responseCode = urlConnection.responseCode
+                val responseMessage = urlConnection.responseMessage
+
+                //onErrorListener.onError(AppError.Error1)
+
+
+
+
                 val buffer =
                     BufferedReader(InputStreamReader(urlConnection.inputStream)) //открываем соединение и забуферизировали
                 //val result = (buffer)
