@@ -11,6 +11,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
+
         android:theme="@style/Theme.Kotlin"
         tools:targetApi="31">
         <activity
@@ -25,3 +26,4 @@
     </application>
 
 </manifest>
+    <!--android:networkSecurityConfig="@xml/security_settings"-->

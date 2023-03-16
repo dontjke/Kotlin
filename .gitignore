@@ -16,6 +16,7 @@ android/libs/armeabi-v7a/
 android/libs/x86/
 android/gen/
 
+
 .idea/
 *.ipr
 *.iws
@@ -40,3 +41,4 @@ local.properties
 project.properties
 app.properties
 *.p12
+apikey.properties
