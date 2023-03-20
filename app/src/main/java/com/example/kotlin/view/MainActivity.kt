@@ -8,6 +8,7 @@ import android.view.MenuItem
 import com.example.kotlin.R
 import com.example.kotlin.lesson6.MainService
 import com.example.kotlin.lesson6.ThreadsFragment
+import com.example.kotlin.utils.KEY_SERVICE
 import com.example.kotlin.view.weatherlist.WeatherListFragment
 
 class MainActivity : AppCompatActivity() {
@@ -24,7 +25,9 @@ class MainActivity : AppCompatActivity() {
                 .commit()
         }
 
-        startService(Intent(this,MainService::class.java))
+        startService(Intent(this,MainService::class.java).apply {
+            putExtra(KEY_SERVICE,"привет сервис")
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
