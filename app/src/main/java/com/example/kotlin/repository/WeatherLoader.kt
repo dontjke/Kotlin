@@ -22,7 +22,7 @@ class WeatherLoader(private val onServerResponseListener: OnServerResponse, priv
             (uri.openConnection() as HttpsURLConnection).apply {
                 connectTimeout = 1000 // время на подключение
                 readTimeout = 1000 // ожидание ответа
-                addRequestProperty("X-Yandex-API-Key", BuildConfig.WEATHER_API_KEY)
+                addRequestProperty("X-Yandex-API-Key", "c9563b06-f14b-49db-a5ef-7ee1910db6ad") //BuildConfig.WEATHER_API_KEY
             }
         Thread {//открыли вспомогательный поток
             try {
@@ -49,7 +49,7 @@ class WeatherLoader(private val onServerResponseListener: OnServerResponse, priv
                urlConnection.disconnect()
             }
 
-
+            // поток закрыт
         }.start()
     }
 
