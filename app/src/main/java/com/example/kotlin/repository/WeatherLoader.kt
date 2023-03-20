@@ -33,9 +33,6 @@ class WeatherLoader(private val onServerResponseListener: OnServerResponse, priv
 
                 //onErrorListener.onError(AppError.Error1)
 
-
-
-
                 val buffer =
                     BufferedReader(InputStreamReader(urlConnection.inputStream)) //открываем соединение и забуферизировали
                 //val result = (buffer)
