@@ -3,7 +3,7 @@ package com.example.kotlin.repository
 
 import android.os.Handler
 import android.os.Looper
-import com.example.kotlin.BuildConfig
+import com.example.kotlin.repository.dto.WeatherDTO
 import com.google.gson.Gson
 import java.io.BufferedReader
 import java.io.InputStreamReader

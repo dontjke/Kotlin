@@ -29,27 +29,27 @@ class MainActivity : AppCompatActivity() {
                 .commit()
         }
 
-        startService(Intent(this,MainService::class.java).apply {//создали сервис
-            putExtra(KEY_BUNDLE_ACTIVITY_MESSAGE,"привет сервис")
+        startService(Intent(this, MainService::class.java).apply {//создали сервис
+            putExtra(KEY_BUNDLE_ACTIVITY_MESSAGE, "привет сервис")
         })
-
 
 
         val receiver = MyBroadcastReceiver() //создали приемник
         registerReceiver(receiver, IntentFilter(KEY_VIBE)) //волна
+        // registerReceiver(receiver, IntentFilter("android.intent.action.AIRPLANE_MODE"))   //для дз
         //LocalBroadcastManager.getInstance(this).registerReceiver(receiver, IntentFilter("myaction"))
 
 
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu,menu)
+        menuInflater.inflate(R.menu.menu, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            R.id.action_threads->{
+        when (item.itemId) {
+            R.id.action_threads -> {
                 supportFragmentManager
                     .beginTransaction()
                     .replace(R.id.container, ThreadsFragment.newInstance())

@@ -1,4 +1,4 @@
-package com.example.kotlin.repository
+package com.example.kotlin.repository.dto
 
 
 import android.os.Parcelable
