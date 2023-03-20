@@ -1,19 +1,17 @@
-package com.example.kotlin.lesson6
+package com.example.kotlin.view.details
 
 import android.app.IntentService
 import android.content.Intent
 import android.util.Log
-import com.example.kotlin.utils.KEY_BUNDLE_ACTIVITY_MESSAGE
-import com.example.kotlin.utils.KEY_BUNDLE_SERVICE_MESSAGE
-import com.example.kotlin.utils.KEY_VIBE
+import com.example.kotlin.utils.*
 
-
-class MainService(val name: String = "") : IntentService(name) {
+class DetailsService(val name: String = "") : IntentService(name) {
     override fun onHandleIntent(p0: Intent?) {
-        Log.d("@@@", "work MainService")
+        Log.d("@@@", "work DetailsService")
         p0?.let {
-            val extra = it.getStringExtra(KEY_BUNDLE_ACTIVITY_MESSAGE) //получаю от активити в сервис
-            Log.d("@@@", "work MainService $extra")
+            val lat = it.getStringExtra(KEY_BUNDLE_LAT) //получаю от  в сервис
+            val lon = it.getStringExtra(KEY_BUNDLE_LON) //получаю от  в сервис
+            Log.d("@@@", "work DetailsService$lat $lon")
             val message = Intent(KEY_VIBE)  //создаю ответ от сервиса в активити
             message.putExtra(KEY_BUNDLE_SERVICE_MESSAGE,"привет активити")  //сообщение в активити
             sendBroadcast(message) //отправляю

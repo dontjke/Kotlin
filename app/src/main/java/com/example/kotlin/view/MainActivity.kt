@@ -11,8 +11,8 @@ import com.example.kotlin.R
 import com.example.kotlin.lesson6.MainService
 import com.example.kotlin.lesson6.MyBroadcastReceiver
 import com.example.kotlin.lesson6.ThreadsFragment
-import com.example.kotlin.utils.KEY_ACTION
-import com.example.kotlin.utils.KEY_SERVICE
+import com.example.kotlin.utils.KEY_BUNDLE_ACTIVITY_MESSAGE
+import com.example.kotlin.utils.KEY_VIBE
 import com.example.kotlin.view.weatherlist.WeatherListFragment
 
 class MainActivity : AppCompatActivity() {
@@ -30,13 +30,13 @@ class MainActivity : AppCompatActivity() {
         }
 
         startService(Intent(this,MainService::class.java).apply {//создали сервис
-            putExtra(KEY_SERVICE,"привет сервис")
+            putExtra(KEY_BUNDLE_ACTIVITY_MESSAGE,"привет сервис")
         })
 
 
 
         val receiver = MyBroadcastReceiver() //создали приемник
-        registerReceiver(receiver, IntentFilter(KEY_ACTION)) //волна
+        registerReceiver(receiver, IntentFilter(KEY_VIBE)) //волна
         //LocalBroadcastManager.getInstance(this).registerReceiver(receiver, IntentFilter("myaction"))
 
 
