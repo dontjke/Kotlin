@@ -1,13 +1,17 @@
 package com.example.kotlin.view
 
 import android.content.Intent
+import android.content.IntentFilter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.kotlin.R
 import com.example.kotlin.lesson6.MainService
+import com.example.kotlin.lesson6.MyBroadcastReceiver
 import com.example.kotlin.lesson6.ThreadsFragment
+import com.example.kotlin.utils.KEY_ACTION
 import com.example.kotlin.utils.KEY_SERVICE
 import com.example.kotlin.view.weatherlist.WeatherListFragment
 
@@ -25,9 +29,17 @@ class MainActivity : AppCompatActivity() {
                 .commit()
         }
 
-        startService(Intent(this,MainService::class.java).apply {
+        startService(Intent(this,MainService::class.java).apply {//создали сервис
             putExtra(KEY_SERVICE,"привет сервис")
         })
+
+
+
+        val receiver = MyBroadcastReceiver() //создали приемник
+        registerReceiver(receiver, IntentFilter(KEY_ACTION)) //волна
+        //LocalBroadcastManager.getInstance(this).registerReceiver(receiver, IntentFilter("myaction"))
+
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
