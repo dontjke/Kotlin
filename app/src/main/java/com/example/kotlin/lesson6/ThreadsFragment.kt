@@ -1,4 +1,4 @@
-package com.example.kotlin.view
+package com.example.kotlin.lesson6
 
 import android.os.Bundle
 import android.os.Handler
@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.content.ContentProviderCompat.requireContext
 import com.example.kotlin.databinding.FragmentThreadsBinding
 import java.lang.Thread.sleep
 
@@ -77,7 +76,7 @@ class ThreadsFragment : Fragment() {
     private fun createTextView(name: String) {
         binding.mainContainer.addView(TextView(requireContext()).apply {
             text = Thread.currentThread().name
-            textSize = 10f
+            textSize = 14f
         })
     }
 

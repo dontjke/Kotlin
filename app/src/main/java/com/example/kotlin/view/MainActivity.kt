@@ -1,10 +1,13 @@
 package com.example.kotlin.view
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import com.example.kotlin.R
+import com.example.kotlin.lesson6.MainService
+import com.example.kotlin.lesson6.ThreadsFragment
 import com.example.kotlin.view.weatherlist.WeatherListFragment
 
 class MainActivity : AppCompatActivity() {
@@ -20,6 +23,8 @@ class MainActivity : AppCompatActivity() {
                 .replace(R.id.container, WeatherListFragment.newInstance())
                 .commit()
         }
+
+        startService(Intent(this,MainService::class.java))
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
