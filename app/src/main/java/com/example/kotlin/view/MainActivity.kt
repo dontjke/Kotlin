@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import com.example.kotlin.R
-import com.example.kotlin.view.weatherlist.ThreadsFragment
 import com.example.kotlin.view.weatherlist.WeatherListFragment
 
 class MainActivity : AppCompatActivity() {
