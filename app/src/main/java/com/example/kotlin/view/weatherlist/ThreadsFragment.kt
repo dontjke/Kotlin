@@ -40,7 +40,8 @@ class ThreadsFragment : Fragment() {
                 Thread{
                     val time = threadsEditText.text.toString().toLong()
                     sleep(time*1000L)
-                    threadsTextView.text = "Плотно поработали ${time} секунд"
+                    requireActivity().runOnUiThread { threadsTextView.text = "Плотно поработали ${time} секунд" } //вынес в UI Thread
+
                 } .start()
 
 
