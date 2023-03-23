@@ -14,6 +14,7 @@ import com.example.kotlin.viewmodel.DetailsState
 import com.example.kotlin.viewmodel.DetailsViewModel
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.snackbar.Snackbar.make
+import kotlinx.android.synthetic.main.fragment_details.*
 
 class DetailsFragment : Fragment()/*, OnServerResponse, OnServerResponseListener*/ {
 
@@ -90,6 +91,8 @@ class DetailsFragment : Fragment()/*, OnServerResponse, OnServerResponseListener
                     feelsLikeValue.text = weather.feelsLike.toString()
                     cityCoordinates.text = "${weather.city.lat} ${weather.city.lon}"
                     showSnackBar("Получилось", mainView)
+
+
                 }
             }
             // Snackbar.make(binding.mainView, "Получилось", Snackbar.LENGTH_LONG).show()
