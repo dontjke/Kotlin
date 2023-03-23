@@ -11,6 +11,7 @@ import com.example.kotlin.R
 import com.example.kotlin.lesson6.MainService
 import com.example.kotlin.lesson6.MyBroadcastReceiver
 import com.example.kotlin.lesson6.ThreadsFragment
+import com.example.kotlin.repository.CitiesRepositoryRetrofit2Impl
 import com.example.kotlin.utils.KEY_BUNDLE_ACTIVITY_MESSAGE
 import com.example.kotlin.utils.KEY_VIBE
 import com.example.kotlin.view.weatherlist.WeatherListFragment
@@ -39,7 +40,7 @@ class MainActivity : AppCompatActivity() {
         // registerReceiver(receiver, IntentFilter("android.intent.action.AIRPLANE_MODE"))   //для дз
         //LocalBroadcastManager.getInstance(this).registerReceiver(receiver, IntentFilter("myaction"))
 
-
+        CitiesRepositoryRetrofit2Impl().getCityList()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

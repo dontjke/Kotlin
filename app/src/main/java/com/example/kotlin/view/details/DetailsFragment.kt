@@ -115,7 +115,7 @@ class DetailsFragment : Fragment()/*, OnServerResponse, OnServerResponseListener
         }
     }
 
-    fun ImageView.loadSvg(url:String){
+    private fun ImageView.loadSvg(url:String){
         val imageLoader = ImageLoader.Builder(this.context)
             .components {add (SvgDecoder.Factory())}
             .build()
