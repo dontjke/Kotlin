@@ -1,5 +1,10 @@
 package com.example.kotlin.utils
 
+import com.example.kotlin.repository.Weather
+import com.example.kotlin.repository.dto.FactDTO
+import com.example.kotlin.repository.dto.WeatherDTO
+import com.example.kotlin.repository.getDefaultCity
+
 const val KEY_BUNDLE_WEATHER = "WEATHER"
 const val YANDEX_DOMAIN = "https://api.weather.yandex.ru/"
 const val YANDEX_ENDPOINT = "v2/informers?"
@@ -11,9 +16,10 @@ const val KEY_WAVE_SERVICE_BROADCAST = "my_action_way"
 const val KEY_BUNDLE_SERVICE_MESSAGE = "key2"
 const val KEY_BUNDLE_ACTIVITY_MESSAGE = "key1"
 const val KEY_VIBE = "myAction"
-
-
-
-
 class Utils {
+}
+
+fun convertDtoToModel(weatherDTO: WeatherDTO):Weather{
+    val fact:FactDTO = weatherDTO.factDTO
+    return Weather(getDefaultCity(),fact.temperature,fact.feelsLike)
 }
