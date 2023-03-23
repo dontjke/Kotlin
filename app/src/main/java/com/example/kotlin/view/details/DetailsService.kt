@@ -22,7 +22,7 @@ class DetailsService(val name: String = "") : IntentService(name) {
             Log.d("@@@", "work DetailsService$lat $lon")
 
 
-            val urlText = "$YANDEX_DOMAIN${YANDEX_PATH}lat=$lat&lon=$lon" // получили адрес
+            val urlText = "$YANDEX_DOMAIN${YANDEX_ENDPOINT}lat=$lat&lon=$lon" // получили адрес
             val uri = URL(urlText) // создал uri
             val urlConnection: HttpsURLConnection =  // создание потока
                 (uri.openConnection() as HttpsURLConnection).apply {
