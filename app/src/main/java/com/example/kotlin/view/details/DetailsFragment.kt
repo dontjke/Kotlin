@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.example.kotlin.databinding.FragmentDetailsBinding
 import com.example.kotlin.repository.Weather
 import com.example.kotlin.utils.KEY_BUNDLE_WEATHER
@@ -61,23 +62,25 @@ class DetailsFragment : Fragment()/*, OnServerResponse, OnServerResponseListener
         /*LocalBroadcastManager.getInstance(requireContext())  //локальный приемник
             .registerReceiver(receiver, IntentFilter(KEY_WAVE_SERVICE_BROADCAST))*/
 
-        viewModel.getLiveData().observe(viewLifecycleOwner, object : Observer<DetailsState> {   //получаю viewModel, подписался
-            override fun onChanged(t: DetailsState) {
-                renderData(t)  //орисовываю в renderData при изменениях
-            }
-        })
+        viewModel.getLiveData().observe(
+            viewLifecycleOwner,
+            object : Observer<DetailsState> {   //получаю viewModel, подписался
+                override fun onChanged(t: DetailsState) {
+                    renderData(t)  //орисовываю в renderData при изменениях
+                }
+            })
 
 
         arguments?.getParcelable<Weather>(KEY_BUNDLE_WEATHER)?.let {
             viewModel.getWeather(it.city)
-           // currentCityName = it.city.name
+            // currentCityName = it.city.name
             //(it.city.lat, it.city.lon)
         }
     }
 
 
     private fun renderData(detailsState: DetailsState) {
-        when (detailsState){
+        when (detailsState) {
             is DetailsState.Error -> {
             }
             DetailsState.Loading -> {
@@ -86,12 +89,15 @@ class DetailsFragment : Fragment()/*, OnServerResponse, OnServerResponseListener
                 val weather = detailsState.weather
                 with(binding) {
                     loadingLayout.visibility = View.GONE
-                   cityNameTextView.text = weather.city.name
+                    cityNameTextView.text = weather.city.name
                     temperatureValue.text = weather.temperature.toString()
                     feelsLikeValue.text = weather.feelsLike.toString()
                     cityCoordinates.text = "${weather.city.lat} ${weather.city.lon}"
                     showSnackBar("Получилось", mainView)
 
+                    Glide.with(requireContext())
+                        .load("https://freepngimg.com/thumb/city/36275-3-city-hd.png")
+                        .into(headerIcon)
 
                 }
             }
