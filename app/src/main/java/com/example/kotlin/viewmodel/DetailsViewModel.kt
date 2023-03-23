@@ -2,14 +2,11 @@ package com.example.kotlin.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.kotlin.repository.City
-import com.example.kotlin.repository.DetailsRepository
-import com.example.kotlin.repository.DetailsRepositoryOkhttpImpl
-import com.example.kotlin.repository.Weather
+import com.example.kotlin.repository.*
 
 class DetailsViewModel(
     private val liveData: MutableLiveData<DetailsState> = MutableLiveData(),
-    private val repository: DetailsRepository = DetailsRepositoryOkhttpImpl() //можно подключить любой репозиторий, который реализует DetailsRepository
+    private val repository: DetailsRepository = DetailsRepositoryRetrofit2Impl()/*DetailsRepositoryOkhttpImpl()*/ //можно подключить любой репозиторий, который реализует DetailsRepository
 ) : ViewModel() {
 
     fun getLiveData() = liveData
