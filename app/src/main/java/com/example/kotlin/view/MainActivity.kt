@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import com.example.kotlin.MyApp
 import com.example.kotlin.R
 import com.example.kotlin.lesson6.MainService
 import com.example.kotlin.lesson6.MyBroadcastReceiver
@@ -48,6 +49,9 @@ class MainActivity : AppCompatActivity() {
 
         val defaultValueIsRussian = true
         sp.getBoolean(KEY_SP_FILE_NAME_1_KEY_IS_RUSSIAN,defaultValueIsRussian)
+
+
+        MyApp.getHistoryDao().getAll()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
