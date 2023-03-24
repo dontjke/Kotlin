@@ -5,17 +5,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import coil.ImageLoader
-import coil.decode.SvgDecoder
 import coil.load
-import coil.request.ImageRequest
 import com.example.kotlin.databinding.FragmentDetailsBinding
 import com.example.kotlin.repository.Weather
 import com.example.kotlin.utils.KEY_BUNDLE_WEATHER
+import com.example.kotlin.utils.loadSvg
 import com.example.kotlin.viewmodel.DetailsState
 import com.example.kotlin.viewmodel.DetailsViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -108,25 +105,14 @@ class DetailsFragment : Fragment()/*, OnServerResponse, OnServerResponseListener
 
                     headerCityIcon.load("https://freepngimg.com/thumb/city/36275-3-city-hd.png")//coil
 
-                   icon.loadSvg("https://yastatic.net/weather/i/icons/blueye/color/svg/${weather.icon}.svg")
+                    icon.loadSvg("https://yastatic.net/weather/i/icons/blueye/color/svg/${weather.icon}.svg")
                 }
             }
             // Snackbar.make(binding.mainView, "Получилось", Snackbar.LENGTH_LONG).show()
         }
     }
 
-    private fun ImageView.loadSvg(url:String){
-        val imageLoader = ImageLoader.Builder(this.context)
-            .components {add (SvgDecoder.Factory())}
-            .build()
-        val request = ImageRequest.Builder(this.context)
-            .crossfade(true)
-            .crossfade(500)
-            .data(url)
-            .target(this)
-            .build()
-        imageLoader.enqueue(request)
-    }
+
     private fun showSnackBar(string: String, view: View) =
         make(view, string, Snackbar.LENGTH_LONG).show()
 

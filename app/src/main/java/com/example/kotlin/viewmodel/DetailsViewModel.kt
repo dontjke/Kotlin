@@ -6,19 +6,25 @@ import com.example.kotlin.repository.*
 
 class DetailsViewModel(
     private val liveData: MutableLiveData<DetailsState> = MutableLiveData(),
-    private val repository: DetailsRepository = DetailsRepositoryRetrofit2Impl()/*DetailsRepositoryOkhttpImpl()*/ //можно подключить любой репозиторий, который реализует DetailsRepository
+    private val repositoryOne: DetailsRepositoryOne = DetailsRepositoryOneRetrofit2Impl(),/*DetailsRepositoryOkhttpImpl()*/ //можно подключить любой репозиторий, который реализует DetailsRepository
+    private val repositoryAdd: DetailsRepositoryAdd = DetailsRepositoryRoomImpl()
 ) : ViewModel() {
+
 
     fun getLiveData() = liveData
 
     fun getWeather(city: City) {
         liveData.postValue(DetailsState.Loading)
-        repository.getWeatherDetails(
+        repositoryOne.getWeatherDetails(
             city
-        ) { weather -> liveData.postValue(DetailsState.Success(weather)) }
+        ) { weather ->
+            liveData.postValue(DetailsState.Success(weather))
+            repositoryAdd.addWeather(weather)
+        }
     }
 
     fun interface Callback {
         fun onResponse(weather: Weather)
     }
+
 }

@@ -1,14 +1,11 @@
 package com.example.kotlin
 
-import android.app.Activity
 import android.app.Application
-import android.content.Context
-import android.provider.Telephony.Threads
 import androidx.room.Room
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.kotlin.domian.room.HistoryDao
 import com.example.kotlin.domian.room.MyDataBase
-import com.example.kotlin.lesson6.ThreadsFragment
-import kotlin.concurrent.thread
 
 class MyApp : Application() {
     override fun onCreate() {
@@ -25,16 +22,24 @@ class MyApp : Application() {
             if (dataBase == null) {
                 if (appContext != null) {
 
-                       dataBase =
-                            Room.databaseBuilder(appContext!!, MyDataBase::class.java, "test")
-                                .allowMainThreadQueries()
-                                .build()
+                    dataBase =
+                        Room.databaseBuilder(appContext!!, MyDataBase::class.java, "test")
+                            .allowMainThreadQueries()
+                            .addMigrations(migration_1_2)
+                            .build()
 
                 } else {
                     throw java.lang.IllegalStateException("что-то пошло не так, пуст appContext")
                 }
             }
             return dataBase!!.historyDao()
+        }
+
+        private val migration_1_2: Migration = object : Migration(1, 2) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE history_table ADD column condition TEXT NOT NULL DEFAULT ''")
+            }
+
         }
     }
 }

@@ -16,6 +16,7 @@ import com.example.kotlin.utils.KEY_BUNDLE_ACTIVITY_MESSAGE
 import com.example.kotlin.utils.KEY_SP_FILE_NAME_1_KEY_IS_RUSSIAN
 import com.example.kotlin.utils.KEY_SP_FILE_NAME_1
 import com.example.kotlin.utils.KEY_VIBE
+import com.example.kotlin.view.weatherlist.HistoryWeatherListFragment
 import com.example.kotlin.view.weatherlist.WeatherListFragment
 
 class MainActivity : AppCompatActivity() {
@@ -65,6 +66,14 @@ class MainActivity : AppCompatActivity() {
                 supportFragmentManager
                     .beginTransaction()
                     .replace(R.id.container, ThreadsFragment.newInstance())
+                    .addToBackStack("")
+                    .commit()
+            }
+            R.id.action_history -> {
+                supportFragmentManager
+                    .beginTransaction()
+                    .add(R.id.container, HistoryWeatherListFragment.newInstance())
+                    .addToBackStack("")
                     .commit()
             }
         }

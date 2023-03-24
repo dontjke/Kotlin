@@ -11,6 +11,6 @@ data class HistoryEntity(  //таблица
     val temperature: Int,
    /* val timestamp: Long,*/
     val feelsLike: Int,
-    val icon: String
-
+    val icon: String,
+    val condition: String = "cloudy"
 )
