@@ -7,4 +7,7 @@ class MyApp:Application() {
         super.onCreate()
     }
 
+    companion object{
+
+    }
 }
