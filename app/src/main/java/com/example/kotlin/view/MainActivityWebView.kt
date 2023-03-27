@@ -1,15 +1,12 @@
 package com.example.kotlin.view
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import com.example.kotlin.R
+import androidx.appcompat.app.AppCompatActivity
 import com.example.kotlin.databinding.ActivityMainWebViewBinding
-import com.example.kotlin.view.weatherlist.WeatherListFragment
 import java.io.BufferedReader
 import java.io.InputStreamReader
-import java.net.HttpURLConnection
 import java.net.URL
 import java.util.stream.Collectors
 import javax.net.ssl.HttpsURLConnection
@@ -39,7 +36,13 @@ class MainActivityWebView : AppCompatActivity() {
                 Handler(Looper.getMainLooper()).post { //поток главный   2 способ
                     //  binding.webview.loadData(result,"text/html; utf-8", "utf-8")
                     binding.webview.settings.javaScriptEnabled = true
-                    binding.webview.loadDataWithBaseURL(null, result, "text/html; utf-8", "utf-8",null)
+                    binding.webview.loadDataWithBaseURL(
+                        null,
+                        result,
+                        "text/html; utf-8",
+                        "utf-8",
+                        null
+                    )
                 }
 
             }.start()
