@@ -45,14 +45,19 @@ class MainActivity : AppCompatActivity() {
 
         val sp = getSharedPreferences(KEY_SP_FILE_NAME_1, Context.MODE_PRIVATE)
         val editor = sp.edit()
-        editor.putBoolean(KEY_SP_FILE_NAME_1_KEY_IS_RUSSIAN,true) // сохраняем в SP состояние кнопки локации Россия/мир
+        editor.putBoolean(
+            KEY_SP_FILE_NAME_1_KEY_IS_RUSSIAN,
+            true
+        ) // сохраняем в SP состояние кнопки локации Россия/мир
         editor.apply()
 
         val defaultValueIsRussian = true
-        sp.getBoolean(KEY_SP_FILE_NAME_1_KEY_IS_RUSSIAN,defaultValueIsRussian)
+        sp.getBoolean(KEY_SP_FILE_NAME_1_KEY_IS_RUSSIAN, defaultValueIsRussian)
 
+        Thread {
+            MyApp.getHistoryDao().getAll()
+        }.start()
 
-        MyApp.getHistoryDao().getAll()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
