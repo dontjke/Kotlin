@@ -26,20 +26,25 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".lesson6.MainService"/>
-        <service android:name=".view.details.DetailsService"/>
+        <service android:name=".lesson6.MainService" />
+        <service android:name=".view.details.DetailsService" />
 
-        <receiver android:name=".lesson6.MyBroadcastReceiver"
-            android:exported="true"
-            android:enabled="true">
+        <receiver
+            android:name=".lesson6.MyBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true">
             <intent-filter>
-            <action android:name="android.intent.action.AIRPLANE_MODE" />
-            <action android:name= "myAction"/>
+                <action android:name="android.intent.action.AIRPLANE_MODE" />
+                <action android:name="myAction" />
 
             </intent-filter>
         </receiver>
-
+        <provider
+            android:name=".lesson9.HistoryContentProvider"
+            android:authorities="authorities"
+            android:enabled="true"
+            android:exported="true"
+             />
     </application>
 
-</manifest>
-    <!--android:networkSecurityConfig="@xml/security_settings"-->
+</manifest><!--android:networkSecurityConfig="@xml/security_settings"-->

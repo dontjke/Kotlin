@@ -1,11 +1,13 @@
 package com.example.kotlin.lesson9
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.ContentResolver
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.provider.ContactsContract
+import android.provider.ContactsContract.CommonDataKinds.Phone
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -99,6 +101,7 @@ class WorkWithContentProviderFragment : Fragment() {
 
     }
 
+
     private fun getContacts() {
         val contentResolver: ContentResolver = requireContext().contentResolver
         //запрос
@@ -113,14 +116,18 @@ class WorkWithContentProviderFragment : Fragment() {
             for (i in 0 until it.count) {
                 if (cursor.moveToPosition(i)) {
                     val columnNameIndex = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)
+
                     val name = cursor.getString(columnNameIndex)
+
                     binding.contactsContainer.addView(TextView(requireContext()).apply {
                         textSize = 30f
                         text = name
 
                     })
+
                 }
             }
+
         }
     }
 
