@@ -15,8 +15,8 @@
     <string name="_3">3</string>
     <string name="history">history</string>
     <string name="work_with_content_provider">WWCP</string>
-    <string name="alert_dialog_negative_button">Не надо</string>
-    <string name="alert_dialog_positive_button">Предоставить доступ</string>
-    <string name="alert_dialog_title">Доступ к контактам</string>
-    <string name="alert_dialog_message">Важное объяснение что бы нажали да</string>
+    <string name="alert_dialog_negative_button">No need</string>
+    <string name="alert_dialog_positive_button">Grant access</string>
+    <string name="alert_dialog_title">Access to contacts</string>
+    <string name="alert_dialog_message">Important explanation to press yes</string>
 </resources>

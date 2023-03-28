@@ -24,6 +24,7 @@ const val KEY_BUNDLE_ACTIVITY_MESSAGE = "key1"
 const val KEY_VIBE = "myAction"
 const val KEY_SP_FILE_NAME_1 = "fileName1"
 const val KEY_SP_FILE_NAME_1_KEY_IS_RUSSIAN = "is_russian"
+const val REQUEST_CODE = 999
 
 
 fun convertDtoToModel(weatherDTO: WeatherDTO): Weather {

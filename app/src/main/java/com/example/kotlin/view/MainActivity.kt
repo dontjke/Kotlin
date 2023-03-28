@@ -12,6 +12,7 @@ import com.example.kotlin.R
 import com.example.kotlin.lesson6.MainService
 import com.example.kotlin.lesson6.MyBroadcastReceiver
 import com.example.kotlin.lesson6.ThreadsFragment
+import com.example.kotlin.lesson9.WorkWithContentProviderFragment
 import com.example.kotlin.utils.KEY_BUNDLE_ACTIVITY_MESSAGE
 import com.example.kotlin.utils.KEY_SP_FILE_NAME_1_KEY_IS_RUSSIAN
 import com.example.kotlin.utils.KEY_SP_FILE_NAME_1
@@ -78,6 +79,13 @@ class MainActivity : AppCompatActivity() {
                 supportFragmentManager
                     .beginTransaction()
                     .add(R.id.container, HistoryWeatherListFragment.newInstance())
+                    .addToBackStack("")
+                    .commit()
+            }
+            R.id.action_work_with_content_provider -> {
+                supportFragmentManager
+                    .beginTransaction()
+                    .add(R.id.container, WorkWithContentProviderFragment.newInstance())
                     .addToBackStack("")
                     .commit()
             }
