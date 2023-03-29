@@ -4,10 +4,13 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.ContentResolver
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
+import android.net.Uri
 import android.os.Bundle
 import android.provider.ContactsContract
+import android.provider.ContactsContract.CommonDataKinds.Phone
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +21,8 @@ import androidx.fragment.app.Fragment
 import com.example.kotlin.R
 import com.example.kotlin.databinding.FragmentWorkWithContentProviderBinding
 import com.example.kotlin.utils.REQUEST_CODE
+import com.example.kotlin.view.weatherlist.OnItemClickListener
+import java.text.NumberFormat
 
 
 class WorkWithContentProviderFragment : Fragment() {
@@ -137,13 +142,18 @@ class WorkWithContentProviderFragment : Fragment() {
                             val phoneNumber: String =
                                 phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
 
+
                             binding.contactsContainer.addView(TextView(requireContext()).apply {
                                 textSize = 30f
                                 text = getString(R.string.name_phone_template, name, phoneNumber)
+                                setOnClickListener {
 
+                                    val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:$phoneNumber"))
+                                    startActivity(intent)
+
+                                }
                             })
                         }
-                        phones.close()
                     }
                 }
             }
@@ -151,10 +161,11 @@ class WorkWithContentProviderFragment : Fragment() {
         }
     }
 
-
     companion object {
         @JvmStatic
         fun newInstance() = WorkWithContentProviderFragment()
     }
 
 }
+
+
