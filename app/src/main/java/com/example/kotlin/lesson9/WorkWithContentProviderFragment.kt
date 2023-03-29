@@ -5,9 +5,10 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.ContentResolver
 import android.content.pm.PackageManager
+import android.database.Cursor
 import android.os.Bundle
 import android.provider.ContactsContract
-import android.provider.ContactsContract.CommonDataKinds.Phone
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -102,6 +103,7 @@ class WorkWithContentProviderFragment : Fragment() {
     }
 
 
+    @SuppressLint("Range")
     private fun getContacts() {
         val contentResolver: ContentResolver = requireContext().contentResolver
         //запрос
@@ -115,19 +117,37 @@ class WorkWithContentProviderFragment : Fragment() {
         cursor?.let {
             for (i in 0 until it.count) {
                 if (cursor.moveToPosition(i)) {
-                    val columnNameIndex = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)
+                    val columnNameIndex =
+                        cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)
 
                     val name = cursor.getString(columnNameIndex)
 
-                    binding.contactsContainer.addView(TextView(requireContext()).apply {
-                        textSize = 30f
-                        text = name
+                    val id: String =
+                        cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID))
 
-                    })
+                    val phones = contentResolver.query(
+                        ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                        null,
+                        ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + id,
+                        null,
+                        null
+                    )
+                    phones?.let {
+                        while (phones.moveToNext()) {
+                            val phoneNumber: String =
+                                phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
 
+                            binding.contactsContainer.addView(TextView(requireContext()).apply {
+                                textSize = 30f
+                                text = getString(R.string.name_phone_template, name, phoneNumber)
+
+                            })
+                        }
+                        phones.close()
+                    }
                 }
             }
-
+            cursor.close()
         }
     }
 
