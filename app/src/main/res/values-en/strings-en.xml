@@ -18,6 +18,7 @@
     <string name="alert_dialog_negative_button">No need</string>
     <string name="alert_dialog_positive_button">Grant access</string>
     <string name="alert_dialog_title">Access to contacts</string>
+    <string name="alert_dialog_title_call">Access to call</string>
     <string name="alert_dialog_message">Important explanation to press yes</string>
     <string name="authorities">history_authority</string>
 

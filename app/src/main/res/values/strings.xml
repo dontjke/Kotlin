@@ -18,6 +18,7 @@
     <string name="alert_dialog_negative_button">Не надо</string>
     <string name="alert_dialog_positive_button">Предоставить доступ</string>
     <string name="alert_dialog_title">Доступ к контактам</string>
+    <string name="alert_dialog_title_call">Доступ к звонку</string>
     <string name="alert_dialog_message">Важное объяснение что бы нажали да</string>
     <string name="authorities">authorities</string>
     <string name="name_phone_template" translatable="false">%s %s</string>

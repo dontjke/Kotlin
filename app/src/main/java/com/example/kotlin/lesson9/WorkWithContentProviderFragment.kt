@@ -6,26 +6,23 @@ import android.app.AlertDialog
 import android.content.ContentResolver
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.provider.ContactsContract
-import android.provider.ContactsContract.CommonDataKinds.Phone
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.kotlin.R
 import com.example.kotlin.databinding.FragmentWorkWithContentProviderBinding
-import com.example.kotlin.utils.REQUEST_CODE
-import com.example.kotlin.view.weatherlist.OnItemClickListener
-import java.text.NumberFormat
 
 
 class WorkWithContentProviderFragment : Fragment() {
+
+    private var currentPhone:String =""
 
     private var _binding: FragmentWorkWithContentProviderBinding? = null //убрали утечку памяти
     private val binding: FragmentWorkWithContentProviderBinding
@@ -53,7 +50,7 @@ class WorkWithContentProviderFragment : Fragment() {
         checkPermission()
     }
 
-    fun checkPermission() {
+    private fun checkPermission() {
         //есть ли разрешение? проверка делается каждый раз т.к. пользователь может отобрать разрешение
         if (ContextCompat.checkSelfPermission(
                 requireContext(),
@@ -64,18 +61,30 @@ class WorkWithContentProviderFragment : Fragment() {
             //если пользователь первый раз отклонил
         } else if (shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS)) {
             //важно написать убедительную просьбу
-            explain()
-        } else { //если разрешения нет и это первый запрос
-            mRequestPermission()
+            explainReadContacts()
+        } else { //если разрешения нет или это первый запрос
+            mRequestPermissionReadContacts()
         }
     }
 
-    private fun explain() {
+    private fun explainReadContacts() {
         AlertDialog.Builder(requireContext())
             .setTitle(getString(R.string.alert_dialog_title))
             .setMessage(getString(R.string.alert_dialog_message))
             .setPositiveButton(getString(R.string.alert_dialog_positive_button)) { _, _ ->
-                mRequestPermission()
+                mRequestPermissionReadContacts()
+            }
+            .setNegativeButton(getString(R.string.alert_dialog_negative_button)) { dialog, _ -> dialog.dismiss() } //в случае отказа можно перекинуть на страничку с текстом почему это важно
+            .create()
+            .show()
+    }
+
+    private fun explainCall() {
+        AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.alert_dialog_title_call))
+            .setMessage(getString(R.string.alert_dialog_message))
+            .setPositiveButton(getString(R.string.alert_dialog_positive_button)) { _, _ ->
+                mRequestPermissionCall()
             }
             .setNegativeButton(getString(R.string.alert_dialog_negative_button)) { dialog, _ -> dialog.dismiss() } //в случае отказа можно перекинуть на страничку с текстом почему это важно
             .create()
@@ -83,29 +92,69 @@ class WorkWithContentProviderFragment : Fragment() {
     }
 
 
-    private fun mRequestPermission() {
-        requestPermissions(arrayOf(Manifest.permission.READ_CONTACTS), REQUEST_CODE)
+    private fun mRequestPermissionReadContacts() {
+        readContactsResultLauncher.launch(Manifest.permission.READ_CONTACTS)
+        // requestPermissions(arrayOf(Manifest.permission.READ_CONTACTS), REQUEST_CODE_READ_CONTACTS)
     }
 
-    override fun onRequestPermissionsResult(
+    private fun mRequestPermissionCall() {
+        callResultLauncher.launch(Manifest.permission.CALL_PHONE)
+       // requestPermissions(arrayOf(Manifest.permission.CALL_PHONE), REQUEST_CODE_CALL_PHONE)
+    }
+
+    private val readContactsResultLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted ->
+            // Handle Permission granted/rejected
+            if (isGranted) {
+                getContacts()
+            } else {
+                explainReadContacts()
+            }
+        }
+    private val callResultLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted ->
+            // Handle Permission granted/rejected
+            if (isGranted) {
+                startCall()
+            } else {
+                explainCall()
+            }
+        }
+
+
+    /*override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
-        if (requestCode == REQUEST_CODE) {
+        if (requestCode == REQUEST_CODE_READ_CONTACTS) {
 
             for (i in permissions.indices) {
                 if (permissions[i] == Manifest.permission.READ_CONTACTS && grantResults[i] == PackageManager.PERMISSION_GRANTED) {
                     getContacts()
                 } else {
-                    explain()
+                    explainReadContacts()
+                }
+            }
+        } else if (requestCode == REQUEST_CODE_CALL_PHONE) {
+
+            for (i in permissions.indices) {
+                if (permissions[i] == Manifest.permission.CALL_PHONE && grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+
+                } else {
+                    explainCall()
                 }
             }
         } else {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         }
 
-    }
+    }*/
+
 
 
     @SuppressLint("Range")
@@ -147,10 +196,18 @@ class WorkWithContentProviderFragment : Fragment() {
                                 textSize = 30f
                                 text = getString(R.string.name_phone_template, name, phoneNumber)
                                 setOnClickListener {
-
-                                    val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:$phoneNumber"))
-                                    startActivity(intent)
-
+                                    currentPhone = phoneNumber
+                                    if (ContextCompat.checkSelfPermission(
+                                            requireContext(),
+                                            Manifest.permission.CALL_PHONE
+                                        ) == PackageManager.PERMISSION_GRANTED
+                                    ) {
+                                        startCall()
+                                    } else if (shouldShowRequestPermissionRationale(Manifest.permission.CALL_PHONE)) {
+                                        explainCall()
+                                    } else {
+                                        mRequestPermissionCall()
+                                    }
                                 }
                             })
                         }
@@ -159,6 +216,10 @@ class WorkWithContentProviderFragment : Fragment() {
             }
             cursor.close()
         }
+    }
+
+    private fun startCall() {
+        startActivity(Intent(Intent.ACTION_CALL).setData(Uri.parse("tel:$currentPhone")))
     }
 
     companion object {
