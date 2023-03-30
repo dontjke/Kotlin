@@ -1,11 +1,15 @@
 package com.example.kotlin.view.weatherlist
 
+import android.Manifest
+import android.app.AlertDialog
+import android.content.pm.PackageManager
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kotlin.R
@@ -55,11 +59,67 @@ class WeatherListFragment : Fragment(), OnItemClickListener {
         }
         val observer = { data: AppState -> renderData(data) }
         viewModel.getData().observe(viewLifecycleOwner, observer)
-        setupFab()
+        setupFabCities()
+        setupFabLocation()
         viewModel.getWeatherRussia()
     }
 
-    private fun setupFab() {
+    private fun setupFabLocation() {
+        binding.mainFragmentFABLocation.setOnClickListener {
+            checkPermission()
+        }
+    }
+
+    private fun checkPermission() {
+        //есть ли разрешение? проверка делается каждый раз т.к. пользователь может отобрать разрешение
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED  //если выдано
+        ) {
+            getLocation()  //получаем
+            //если пользователь первый раз отклонил
+        } else if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
+            //важно написать убедительную просьбу
+            explainAccessFineLocation()
+        } else { //если разрешения нет или это первый запрос
+            mRequestPermissionFineLocation()
+        }
+    }
+
+
+    private fun getLocation(){
+
+    }
+    private fun mRequestPermissionFineLocation() {
+        locationResultLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+        // requestPermissions(arrayOf(Manifest.permission.READ_CONTACTS), REQUEST_CODE_READ_CONTACTS)
+    }
+
+    private val locationResultLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted ->
+            // Handle Permission granted/rejected
+            if (isGranted) {
+                getLocation()
+            } else {
+                explainAccessFineLocation()
+            }
+        }
+
+    private fun explainAccessFineLocation() {
+        AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.dialog_rationale_title))
+            .setMessage(getString(R.string.dialog_rationale_message))
+            .setPositiveButton(getString(R.string.dialog_rationale_give_access)) { _, _ ->
+                mRequestPermissionFineLocation()
+            }
+            .setNegativeButton(getString(R.string.dialog_rationale_decline)) { dialog, _ -> dialog.dismiss() } //в случае отказа можно перекинуть на страничку с текстом почему это важно
+            .create()
+            .show()
+    }
+    private fun setupFabCities() {
         binding.floatingActionButton.setOnClickListener {
             isRussian = !isRussian
             if (isRussian) {
