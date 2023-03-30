@@ -1,9 +1,15 @@
 package com.example.kotlin.view.weatherlist
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.Context
 import android.content.pm.PackageManager
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -88,9 +94,42 @@ class WeatherListFragment : Fragment(), OnItemClickListener {
     }
 
 
-    private fun getLocation(){
+    @SuppressLint("MissingPermission")
+    private fun getLocation() {
+        context?.let {
+            val locationManager = it.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                val providerGPS =
+                    locationManager.getProvider(LocationManager.GPS_PROVIDER)  //можно использовать BestProvider
+                providerGPS?.let {
+                    locationManager.requestLocationUpdates(
+                        LocationManager.GPS_PROVIDER,
+                        10000L,
+                        100f,
+                        locationListener
+                    )
+                }
+            }
+        }
+
 
     }
+
+    private val locationListener = object : LocationListener {
+        override fun onLocationChanged(p0: Location) {
+            Log.d("@@@", p0.toString())
+        }
+
+        override fun onProviderDisabled(provider: String) {
+            Snackbar.make(binding.recyclerView, "gps disable", Snackbar.LENGTH_LONG).show()
+            super.onProviderDisabled(provider)
+        }
+
+        override fun onProviderEnabled(provider: String) {
+            super.onProviderEnabled(provider)
+        }
+    }
+
     private fun mRequestPermissionFineLocation() {
         locationResultLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
         // requestPermissions(arrayOf(Manifest.permission.READ_CONTACTS), REQUEST_CODE_READ_CONTACTS)
@@ -119,6 +158,7 @@ class WeatherListFragment : Fragment(), OnItemClickListener {
             .create()
             .show()
     }
+
     private fun setupFabCities() {
         binding.floatingActionButton.setOnClickListener {
             isRussian = !isRussian
