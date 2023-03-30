@@ -24,7 +24,7 @@ class MyApp : Application() {
 
                     dataBase =
                         Room.databaseBuilder(appContext!!, MyDataBase::class.java, "test")
-                            .allowMainThreadQueries()
+                            //.allowMainThreadQueries()
                             .addMigrations(migration_1_2)
                             .build()
 
