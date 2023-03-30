@@ -8,4 +8,6 @@
     <dimen name="city_name_margin">10dp</dimen>
     <dimen name="city_name_separator">1dp</dimen>
     <dimen name="margin_5_dp">5dp</dimen>
+    <dimen name="fab_location_icon_size">56dp</dimen>
+    <dimen name="fab_margin">20dp</dimen>
 </resources>
