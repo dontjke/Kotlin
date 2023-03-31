@@ -94,7 +94,7 @@ class WeatherListFragment : Fragment(), OnItemClickListener {
     }
 
 
-    @SuppressLint("MissingPermission")
+    @SuppressLint("MissingPermission") //делаю проверку прямо перед вызовом функции
     private fun getLocation() {
         context?.let {
             val locationManager = it.getSystemService(Context.LOCATION_SERVICE) as LocationManager
@@ -104,20 +104,47 @@ class WeatherListFragment : Fragment(), OnItemClickListener {
                 providerGPS?.let {
                     locationManager.requestLocationUpdates(
                         LocationManager.GPS_PROVIDER,
-                        10000L,
-                        100f,
-                        locationListener
+                        10000L,  //срабатывает через заданное время
+                        0f,
+                        locationListenerTime
+                    )
+                }
+                providerGPS?.let {
+                    locationManager.requestLocationUpdates(
+                        LocationManager.GPS_PROVIDER,
+                        0L,
+                        100f, //срабатывает при смене позиции в метрах
+                        locationListenerDistance
                     )
                 }
             }
         }
+    }
 
+    fun getAddressByLocation(location: Location){
 
     }
 
-    private val locationListener = object : LocationListener {
-        override fun onLocationChanged(p0: Location) {
-            Log.d("@@@", p0.toString())
+
+    private val locationListenerTime = object : LocationListener {
+        override fun onLocationChanged(location: Location) {
+            Log.d("@@@", location.toString())
+            getAddressByLocation(location)
+        }
+
+        override fun onProviderDisabled(provider: String) {
+            Snackbar.make(binding.recyclerView, "gps disable", Snackbar.LENGTH_LONG).show()
+            super.onProviderDisabled(provider)
+        }
+
+        override fun onProviderEnabled(provider: String) {
+            super.onProviderEnabled(provider)
+        }
+    }
+    private val locationListenerDistance = object : LocationListener {
+        override fun onLocationChanged(location: Location) {
+            Log.d("@@@", location.toString())
+            getAddressByLocation(location)
         }
 
         override fun onProviderDisabled(provider: String) {
@@ -132,7 +159,6 @@ class WeatherListFragment : Fragment(), OnItemClickListener {
 
     private fun mRequestPermissionFineLocation() {
         locationResultLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-        // requestPermissions(arrayOf(Manifest.permission.READ_CONTACTS), REQUEST_CODE_READ_CONTACTS)
     }
 
     private val locationResultLauncher =
@@ -170,7 +196,6 @@ class WeatherListFragment : Fragment(), OnItemClickListener {
                         R.drawable.ic_russia
                     )
                 )
-
             } else {
                 viewModel.getWeatherWorld()
                 binding.floatingActionButton.setImageDrawable(
