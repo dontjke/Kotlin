@@ -1,25 +1,32 @@
 package com.example.kotlin.lesson10
 
+
+import android.Manifest
+import android.annotation.SuppressLint
+import android.content.pm.PackageManager
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.kotlin.R
 import com.example.kotlin.databinding.FragmentMapsMainBinding
+import com.example.kotlin.utils.REQUEST_LOCATION_PERMISSION
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
 
 class MapsFragment : Fragment() {
 
     private lateinit var map: GoogleMap
-    private val markers: ArrayList<Marker> = arrayListOf()  //список маркеров (встроенный в карты класс)
+    private val markers: ArrayList<Marker> =
+        arrayListOf()  //список маркеров (встроенный в карты класс)
 
 
     private var _binding: FragmentMapsMainBinding? = null //убрали утечку памяти
@@ -29,10 +36,27 @@ class MapsFragment : Fragment() {
         }
 
     private fun addMarkerToArray(location: LatLng) {    //добавляем маркер в список
-        val marker = setMarker(location, markers.size.toString(),
-            R.drawable.ic_map_pin)
+        val marker = setMarker(
+            location, markers.size.toString(),
+            R.drawable.ic_map_pin
+        )
         markers.add(marker)
     }
+
+    private fun drawLine() {
+        var previousBefore: Marker? = null
+        markers.forEach { current ->
+            previousBefore?.let { previous ->
+                map.addPolyline(
+                    PolylineOptions().add(previous.position, current.position)
+                        .color(Color.RED)
+                        .width(5f)
+                )
+            }
+            previousBefore = current
+        }
+    }
+
     private fun setMarker(
         location: LatLng,
         searchText: String,
@@ -45,7 +69,6 @@ class MapsFragment : Fragment() {
                 .icon(BitmapDescriptorFactory.fromResource(resourceId))
         )!!
     }
-
 
 
     override fun onDestroy() {
@@ -65,14 +88,43 @@ class MapsFragment : Fragment() {
          */
         map = googleMap
         val moscow = LatLng(55.0, 37.0)
-        googleMap.addMarker(MarkerOptions().position(moscow).title("Marker in Moscow"))
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(moscow))
-        map.setOnMapLongClickListener{
+        map.addMarker(MarkerOptions().position(moscow).title("Marker in Moscow"))
+        map.moveCamera(CameraUpdateFactory.newLatLng(moscow))
+        map.setOnMapLongClickListener {
             addMarkerToArray(it)
+            drawLine()
         }
+        map.uiSettings.isZoomControlsEnabled = true
+        enableMyLocation()
+
+
+
 
 
     }
+
+    private fun isPermissionGranted() : Boolean {
+        return ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun enableMyLocation() {
+        if (isPermissionGranted()) {
+            map.isMyLocationEnabled = true
+            map.uiSettings.isMyLocationButtonEnabled = true
+        }
+        else {
+
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                REQUEST_LOCATION_PERMISSION
+            )
+        }
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
