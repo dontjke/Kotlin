@@ -8,18 +8,43 @@ import androidx.fragment.app.Fragment
 import com.example.kotlin.R
 import com.example.kotlin.databinding.FragmentMapsMainBinding
 import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 
 class MapsFragment : Fragment() {
+
+    private lateinit var map: GoogleMap
+    private val markers: ArrayList<Marker> = arrayListOf()  //список маркеров (встроенный в карты класс)
+
 
     private var _binding: FragmentMapsMainBinding? = null //убрали утечку памяти
     private val binding: FragmentMapsMainBinding
         get() {
             return _binding!!
         }
+
+    private fun addMarkerToArray(location: LatLng) {    //добавляем маркер в список
+        val marker = setMarker(location, markers.size.toString(),
+            R.drawable.ic_map_pin)
+        markers.add(marker)
+    }
+    private fun setMarker(
+        location: LatLng,
+        searchText: String,
+        resourceId: Int
+    ): Marker {
+        return map.addMarker(
+            MarkerOptions()
+                .position(location)  //где располагается
+                .title(searchText)
+                .icon(BitmapDescriptorFactory.fromResource(resourceId))
+        )!!
+    }
 
 
 
@@ -38,9 +63,15 @@ class MapsFragment : Fragment() {
          * install it inside the SupportMapFragment. This method will only be triggered once the
          * user has installed Google Play services and returned to the app.
          */
+        map = googleMap
         val moscow = LatLng(55.0, 37.0)
         googleMap.addMarker(MarkerOptions().position(moscow).title("Marker in Moscow"))
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(moscow))
+        map.setOnMapLongClickListener{
+            addMarkerToArray(it)
+        }
+
+
     }
 
     override fun onCreateView(
