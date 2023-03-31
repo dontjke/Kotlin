@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.pm.PackageManager
+import android.location.Geocoder
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
@@ -20,6 +21,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kotlin.R
 import com.example.kotlin.databinding.FragmentWeatherListBinding
+import com.example.kotlin.repository.City
 import com.example.kotlin.repository.Weather
 import com.example.kotlin.utils.KEY_BUNDLE_WEATHER
 import com.example.kotlin.view.details.DetailsFragment
@@ -101,14 +103,14 @@ class WeatherListFragment : Fragment(), OnItemClickListener {
             if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                 val providerGPS =
                     locationManager.getProvider(LocationManager.GPS_PROVIDER)  //можно использовать BestProvider
-                providerGPS?.let {
+                /*providerGPS?.let {
                     locationManager.requestLocationUpdates(
                         LocationManager.GPS_PROVIDER,
                         10000L,  //срабатывает через заданное время
                         0f,
                         locationListenerTime
                     )
-                }
+                }*/
                 providerGPS?.let {
                     locationManager.requestLocationUpdates(
                         LocationManager.GPS_PROVIDER,
@@ -121,8 +123,23 @@ class WeatherListFragment : Fragment(), OnItemClickListener {
         }
     }
 
-    fun getAddressByLocation(location: Location){
+    fun getAddressByLocation(location: Location) {
+        val geocoder = Geocoder(requireContext())
+        val timeStump = System.currentTimeMillis()
+        Thread {
+            val addressText =
+                geocoder.getFromLocation(
+                    location.latitude,
+                    location.longitude,
+                    1000000
+                )!![0].getAddressLine(0)
+            requireActivity().runOnUiThread{ //перенес в главный поток
+                showAddressDialog(addressText, location)
+            }
 
+        }.start()
+
+        Log.d("@@@", "прошло ${System.currentTimeMillis() - timeStump}")
     }
 
 
@@ -237,4 +254,29 @@ class WeatherListFragment : Fragment(), OnItemClickListener {
             .addToBackStack("")
             .commit()
     }
+
+    private fun showAddressDialog(address: String, location: Location) {
+        activity?.let {
+            AlertDialog.Builder(it)
+                .setTitle(getString(R.string.dialog_address_title))
+                .setMessage(address)
+                .setPositiveButton(getString(R.string.dialog_address_get_weather)) { _, _ ->
+                    onItemClick(
+                        Weather(
+                            City(
+                                address,
+                                location.latitude,
+                                location.longitude
+                            )
+                        )
+                    )
+                }
+                .setNegativeButton(getString(R.string.dialog_button_close)) { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .create()
+                .show()
+        }
+    }
+
 }
