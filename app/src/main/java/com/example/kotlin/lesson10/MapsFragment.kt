@@ -1,15 +1,15 @@
 package com.example.kotlin.lesson10
 
-
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.location.Geocoder
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -21,6 +21,9 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.fragment_maps_main.*
+import java.util.*
 
 class MapsFragment : Fragment() {
 
@@ -93,51 +96,96 @@ class MapsFragment : Fragment() {
         map.setOnMapLongClickListener {
             addMarkerToArray(it)
             drawLine()
-        }
-        map.uiSettings.isZoomControlsEnabled = true
-        enableMyLocation()
+
+            map.uiSettings.isZoomControlsEnabled = true
+            enableMyLocation()
 
 
-
-
-
-    }
-
-    private fun isPermissionGranted() : Boolean {
-        return ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-    }
-
-    @SuppressLint("MissingPermission")
-    private fun enableMyLocation() {
-        if (isPermissionGranted()) {
-            map.isMyLocationEnabled = true
-            map.uiSettings.isMyLocationButtonEnabled = true
-        }
-        else {
-
-            ActivityCompat.requestPermissions(
-                requireActivity(),
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                REQUEST_LOCATION_PERMISSION
-            )
         }
     }
 
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentMapsMainBinding.inflate(inflater, container, false)
-        return binding.root
+
+        private fun isPermissionGranted(): Boolean {
+            return ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        }
+
+        @SuppressLint("MissingPermission")
+        private fun enableMyLocation() {
+            if (isPermissionGranted()) {
+                map.isMyLocationEnabled = true
+                map.uiSettings.isMyLocationButtonEnabled = true
+            } else {
+
+                ActivityCompat.requestPermissions(
+                    requireActivity(),
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                    REQUEST_LOCATION_PERMISSION
+                )
+            }
+        }
+
+
+        override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+        ): View {
+            _binding = FragmentMapsMainBinding.inflate(inflater, container, false)
+            return binding.root
+        }
+
+        override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+            super.onViewCreated(view, savedInstanceState)
+            val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
+            mapFragment?.getMapAsync(callback)
+
+            initView()
+        }
+
+        private fun initView() {
+            binding.buttonSearch.setOnClickListener {
+                val searchText = binding.searchAddress.text.toString()
+                if (searchText.isEmpty() && searchText.isBlank()) {
+                    Snackbar.make(binding.root, R.string.address_hint, Snackbar.LENGTH_LONG).show()
+                } else {
+
+                    try {
+                        val geocoder = Geocoder(requireContext(), Locale.getDefault())
+
+                        val results = geocoder.getFromLocationName(searchText, 1)
+
+                        if (results == null) {
+                            Log.d("@@@", "results null")
+                        } else {
+
+                            val location = LatLng(
+                                results[0].latitude,
+                                results[0].longitude
+                            )
+
+                            map.addMarker(
+                                MarkerOptions()
+                                    .position(location)
+                                    .title(searchText)
+                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_marker))
+                            )
+                            map.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 10f))
+
+                        }
+
+                    } catch (e: IndexOutOfBoundsException) {
+                        Snackbar.make(binding.root, "адресс не найден", Snackbar.LENGTH_LONG).show()
+                    }
+
+                }
+            }
+        }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
-        mapFragment?.getMapAsync(callback)
-    }
-}
+
+
+
