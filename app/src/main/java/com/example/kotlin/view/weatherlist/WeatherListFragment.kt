@@ -23,11 +23,13 @@ import com.example.kotlin.R
 import com.example.kotlin.databinding.FragmentWeatherListBinding
 import com.example.kotlin.repository.City
 import com.example.kotlin.repository.Weather
+import com.example.kotlin.repository.getDefaultCity
 import com.example.kotlin.utils.KEY_BUNDLE_WEATHER
 import com.example.kotlin.view.details.DetailsFragment
 import com.example.kotlin.viewmodel.AppState
 import com.example.kotlin.viewmodel.MainViewModel
 import com.google.android.material.snackbar.Snackbar
+import java.util.*
 
 class WeatherListFragment : Fragment(), OnItemClickListener {
 
@@ -124,7 +126,7 @@ class WeatherListFragment : Fragment(), OnItemClickListener {
     }
 
     fun getAddressByLocation(location: Location) {
-        val geocoder = Geocoder(requireContext())
+        val geocoder = Geocoder(requireContext())  // , Locale.getDefault() дефолтный язык на устройстве
         val timeStump = System.currentTimeMillis()
         Thread {
             val addressText =
@@ -132,7 +134,7 @@ class WeatherListFragment : Fragment(), OnItemClickListener {
                     location.latitude,
                     location.longitude,
                     1000000
-                )!![0].getAddressLine(0)
+                )!![0].getAddressLine(0) //можно что-то другое округ страна город
             requireActivity().runOnUiThread{ //перенес в главный поток
                 showAddressDialog(addressText, location)
             }
