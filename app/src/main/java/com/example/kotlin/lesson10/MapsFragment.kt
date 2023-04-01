@@ -93,33 +93,31 @@ class MapsFragment : Fragment() {
         val moscow = LatLng(55.0, 37.0)
         map.addMarker(MarkerOptions().position(moscow).title("Marker in Moscow"))
         map.moveCamera(CameraUpdateFactory.newLatLng(moscow))
+        enableMyLocation()
+        map.uiSettings.isMyLocationButtonEnabled = true
+        map.uiSettings.isZoomControlsEnabled = true
+
+
         map.setOnMapLongClickListener {
             addMarkerToArray(it)
             drawLine()
-
-            map.uiSettings.isZoomControlsEnabled = true
-            enableMyLocation()
-
-
         }
     }
 
 
 
         private fun isPermissionGranted(): Boolean {
-            return ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
+            return ContextCompat.checkSelfPermission(requireContext(),Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+
         }
 
-        @SuppressLint("MissingPermission")
+    @SuppressLint("MissingPermission")
         private fun enableMyLocation() {
             if (isPermissionGranted()) {
                 map.isMyLocationEnabled = true
-                map.uiSettings.isMyLocationButtonEnabled = true
-            } else {
 
+
+            } else {
                 ActivityCompat.requestPermissions(
                     requireActivity(),
                     arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
