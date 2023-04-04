@@ -106,21 +106,21 @@ class MapsFragment : Fragment() {
         try {
             map.isMyLocationEnabled = true
         } catch (ignored: SecurityException) {
-
         }
 
         map.setOnMapLongClickListener {
-            getAddressByLocation(it)
             addMarkerToArray(it)
             drawLine()
-
+        }
+        map.setOnMapClickListener {
+            getAddressByLocation(it)
         }
 
     }
 
     private fun getAddressByLocation(location: LatLng) {
         val geocoder = Geocoder(requireContext())  // , Locale.getDefault() дефолтный язык на устройстве
-        val timeStump = System.currentTimeMillis()
+
         Thread {
             val addressText =
                 geocoder.getFromLocation(
@@ -131,10 +131,7 @@ class MapsFragment : Fragment() {
             requireActivity().runOnUiThread{ //перенес в главный поток
                 showAddressDialog(addressText, location)
             }
-
         }.start()
-
-        Log.d("@@@", "прошло ${System.currentTimeMillis() - timeStump}")
     }
 
     private fun showAddressDialog(address: String, location: LatLng) {
