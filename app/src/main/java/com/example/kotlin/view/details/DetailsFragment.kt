@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import coil.load
 import com.example.kotlin.databinding.FragmentDetailsBinding
+import com.example.kotlin.lesson10.MapsFragment
 import com.example.kotlin.repository.Weather
 import com.example.kotlin.utils.KEY_BUNDLE_WEATHER
 import com.example.kotlin.utils.loadSvg
@@ -124,7 +125,11 @@ class DetailsFragment : Fragment()/*, OnServerResponse, OnServerResponseListener
             fragment.arguments = bundle
             return fragment
         }
+
+
     }
+
+
 
     /*override fun onResponse(weatherDTO: WeatherDTO) {
         renderData(weatherDTO)

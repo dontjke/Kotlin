@@ -21,4 +21,10 @@
         app:showAsAction="always"
         />
 
+    <item
+        android:id="@+id/action_google_maps"
+        android:icon="@android:drawable/ic_dialog_map"
+        android:title="google_map"
+        app:showAsAction="always"/>
+
 </menu>

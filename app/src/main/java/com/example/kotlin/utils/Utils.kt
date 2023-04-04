@@ -26,6 +26,7 @@ const val KEY_SP_FILE_NAME_1 = "fileName1"
 const val KEY_SP_FILE_NAME_1_KEY_IS_RUSSIAN = "is_russian"
 const val REQUEST_CODE_READ_CONTACTS = 999
 const val REQUEST_CODE_CALL_PHONE = 888
+const val REQUEST_LOCATION_PERMISSION = 998
 
 
 fun convertDtoToModel(weatherDTO: WeatherDTO): Weather {

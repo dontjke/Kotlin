@@ -9,6 +9,7 @@ import android.view.Menu
 import android.view.MenuItem
 import com.example.kotlin.MyApp
 import com.example.kotlin.R
+import com.example.kotlin.lesson10.MapsFragment
 import com.example.kotlin.lesson6.MainService
 import com.example.kotlin.lesson6.MyBroadcastReceiver
 import com.example.kotlin.lesson6.ThreadsFragment
@@ -86,6 +87,13 @@ class MainActivity : AppCompatActivity() {
                 supportFragmentManager
                     .beginTransaction()
                     .add(R.id.container, WorkWithContentProviderFragment.newInstance())
+                    .addToBackStack("")
+                    .commit()
+            }
+            R.id.action_google_maps -> {
+                supportFragmentManager
+                    .beginTransaction()
+                    .add(R.id.container, MapsFragment())
                     .addToBackStack("")
                     .commit()
             }
