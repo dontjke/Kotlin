@@ -21,7 +21,6 @@ class DetailsRepositoryRoomImpl : DetailsRepositoryOne, DetailsRepositoryAll, De
             callback.onResponse(list.last())
         }.start()
     }
-
     override fun addWeather(weather: Weather) {
         Thread {
 

@@ -35,7 +35,6 @@ class DetailsRepositoryOneRetrofit2Impl : DetailsRepositoryOne {
                 override fun onFailure(call: Call<WeatherDTO>, t: Throwable) {
                     TODO("Not yet implemented")
                 }
-
             })
     }
 }

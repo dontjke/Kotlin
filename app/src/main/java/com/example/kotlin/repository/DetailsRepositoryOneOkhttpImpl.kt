@@ -29,9 +29,7 @@ class DetailsRepositoryOneOkhttpImpl : DetailsRepositoryOne {
                 weather.city = city
                 callback.onResponse(weather)
             } else {
-
             }
-
         }.start()
 
 

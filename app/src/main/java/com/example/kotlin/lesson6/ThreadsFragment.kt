@@ -3,11 +3,11 @@ package com.example.kotlin.lesson6
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import com.example.kotlin.databinding.FragmentThreadsBinding
 import java.lang.Thread.sleep
 
@@ -24,7 +24,6 @@ class ThreadsFragment : Fragment() {
         super.onDestroy()
         _binding = null
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,17 +47,11 @@ class ThreadsFragment : Fragment() {
                     requireActivity().runOnUiThread {
                         threadsTextView.text = "$time секунд"
                         createTextView("${Thread.currentThread().name} ${++counter}")
-
-
                     } //вынес в UI Thread
                     //Handler(Looper.getMainLooper()).post { threadsTextView.text = "Плотно поработали ${time} секунд" }   // то же самое
-
                 }.start()
             }
-
-
             //вечный поток
-
             serviceButton2.setOnClickListener {
                 myThreads.mHandler?.post {
 
@@ -72,14 +65,12 @@ class ThreadsFragment : Fragment() {
         }
     }
 
-
     private fun createTextView(name: String) {
         binding.mainContainer.addView(TextView(requireContext()).apply {
             text = Thread.currentThread().name
             textSize = 14f
         })
     }
-
 
     class MyThreads : Thread() {
         var mHandler: Handler? = null

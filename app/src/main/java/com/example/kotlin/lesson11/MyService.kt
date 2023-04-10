@@ -2,19 +2,15 @@ package com.example.kotlin.lesson11
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.example.kotlin.R
-import com.example.kotlin.view.MainActivity
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
 class MyService : FirebaseMessagingService() {
-
 
     override fun onMessageReceived(message: RemoteMessage) { //принимаю сообщение
         Log.d("@@@", "$message")
@@ -32,7 +28,6 @@ class MyService : FirebaseMessagingService() {
         private const val NOTIFICATION_HIGH = 2
         private const val CHANNEL_LOW = "channel_low"
         private const val CHANNEL_HIGH = "channel_high"
-
         private const val KEY_TITLE = "myTitle"
         private const val KEY_MESSAGE = "myMessage"
     }
@@ -45,7 +40,7 @@ class MyService : FirebaseMessagingService() {
             setSmallIcon(R.drawable.ic_map_marker)
             setContentTitle(title)
             setContentText(message)
-           // setContentIntent(contentIntent)
+            // setContentIntent(contentIntent)
             priority = NotificationManager.IMPORTANCE_HIGH
         }
 

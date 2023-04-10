@@ -30,9 +30,7 @@ class MainActivityWebView : AppCompatActivity() {
                 val buffer =
                     BufferedReader(InputStreamReader(urlConnection.inputStream)) //открываем соединение и забуферизировали
                 val result = getLinesAsOneBigText(buffer)
-                /*runOnUiThread{ //поток главный   1 способ
-                    binding.webview.loadData(result,"text/html; utf-8", "utf-8")
-                }*/
+
                 Handler(Looper.getMainLooper()).post { //поток главный   2 способ
                     //  binding.webview.loadData(result,"text/html; utf-8", "utf-8")
                     binding.webview.settings.javaScriptEnabled = true
@@ -44,11 +42,8 @@ class MainActivityWebView : AppCompatActivity() {
                         null
                     )
                 }
-
             }.start()
-
         }
-
     }
 
     private fun getLinesAsOneBigText(bufferedReader: BufferedReader): String {  //конвертер в строку

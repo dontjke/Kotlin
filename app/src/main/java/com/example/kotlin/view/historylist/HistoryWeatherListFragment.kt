@@ -22,12 +22,10 @@ class HistoryWeatherListFragment : Fragment() {
 
     private val adapter = HistoryWeatherListAdapter()
 
-
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

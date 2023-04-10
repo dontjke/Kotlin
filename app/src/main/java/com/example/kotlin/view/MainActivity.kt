@@ -1,17 +1,13 @@
 package com.example.kotlin.view
 
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.NotificationCompat
+import androidx.fragment.app.Fragment
 import com.example.kotlin.MyApp
 import com.example.kotlin.R
 import com.example.kotlin.lesson10.MapsFragment
@@ -25,7 +21,6 @@ import com.example.kotlin.utils.KEY_SP_FILE_NAME_1_KEY_IS_RUSSIAN
 import com.example.kotlin.utils.KEY_VIBE
 import com.example.kotlin.view.weatherlist.HistoryWeatherListFragment
 import com.example.kotlin.view.weatherlist.WeatherListFragment
-import okhttp3.internal.notify
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,27 +72,23 @@ class MainActivity : AppCompatActivity() {
                     .commit()
             }
             R.id.action_history -> {
-                supportFragmentManager
-                    .beginTransaction()
-                    .add(R.id.container, HistoryWeatherListFragment.newInstance())
-                    .addToBackStack("")
-                    .commit()
+                navigate(HistoryWeatherListFragment.newInstance())
             }
             R.id.action_work_with_content_provider -> {
-                supportFragmentManager
-                    .beginTransaction()
-                    .add(R.id.container, WorkWithContentProviderFragment.newInstance())
-                    .addToBackStack("")
-                    .commit()
+                navigate(WorkWithContentProviderFragment.newInstance())
             }
             R.id.action_google_maps -> {
-                supportFragmentManager
-                    .beginTransaction()
-                    .add(R.id.container, MapsFragment())
-                    .addToBackStack("")
-                    .commit()
+                navigate(MapsFragment())
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun navigate(fragment: Fragment) {
+        supportFragmentManager
+            .beginTransaction()
+            .add(R.id.container, fragment)
+            .addToBackStack("")
+            .commit()
     }
 }

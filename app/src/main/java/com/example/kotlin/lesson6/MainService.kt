@@ -18,7 +18,6 @@ class MainService(val name: String = "") : IntentService(name) {
             val message = Intent(KEY_VIBE)  //создаю ответ от сервиса в активити
             message.putExtra(KEY_BUNDLE_SERVICE_MESSAGE,"привет активити")  //сообщение в активити
             sendBroadcast(message) //отправляю
-            //LocalBroadcastManager.getInstance(this).sendBroadcast(message) //отправляю локально
         }
     }
 }

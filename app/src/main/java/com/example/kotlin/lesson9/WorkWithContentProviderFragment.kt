@@ -22,7 +22,7 @@ import com.example.kotlin.databinding.FragmentWorkWithContentProviderBinding
 
 class WorkWithContentProviderFragment : Fragment() {
 
-    private var currentPhone:String =""
+    private var currentPhone: String = ""
 
     private var _binding: FragmentWorkWithContentProviderBinding? = null //убрали утечку памяти
     private val binding: FragmentWorkWithContentProviderBinding
@@ -35,7 +35,6 @@ class WorkWithContentProviderFragment : Fragment() {
         _binding = null
     }
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -43,7 +42,6 @@ class WorkWithContentProviderFragment : Fragment() {
         _binding = FragmentWorkWithContentProviderBinding.inflate(inflater, container, false)
         return binding.root
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -91,7 +89,6 @@ class WorkWithContentProviderFragment : Fragment() {
             .show()
     }
 
-
     private fun mRequestPermissionReadContacts() {
         readContactsResultLauncher.launch(Manifest.permission.READ_CONTACTS)
         // requestPermissions(arrayOf(Manifest.permission.READ_CONTACTS), REQUEST_CODE_READ_CONTACTS)
@@ -99,7 +96,7 @@ class WorkWithContentProviderFragment : Fragment() {
 
     private fun mRequestPermissionCall() {
         callResultLauncher.launch(Manifest.permission.CALL_PHONE)
-       // requestPermissions(arrayOf(Manifest.permission.CALL_PHONE), REQUEST_CODE_CALL_PHONE)
+        // requestPermissions(arrayOf(Manifest.permission.CALL_PHONE), REQUEST_CODE_CALL_PHONE)
     }
 
     private val readContactsResultLauncher =
@@ -124,38 +121,6 @@ class WorkWithContentProviderFragment : Fragment() {
                 explainCall()
             }
         }
-
-
-    /*override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        if (requestCode == REQUEST_CODE_READ_CONTACTS) {
-
-            for (i in permissions.indices) {
-                if (permissions[i] == Manifest.permission.READ_CONTACTS && grantResults[i] == PackageManager.PERMISSION_GRANTED) {
-                    getContacts()
-                } else {
-                    explainReadContacts()
-                }
-            }
-        } else if (requestCode == REQUEST_CODE_CALL_PHONE) {
-
-            for (i in permissions.indices) {
-                if (permissions[i] == Manifest.permission.CALL_PHONE && grantResults[i] == PackageManager.PERMISSION_GRANTED) {
-
-                } else {
-                    explainCall()
-                }
-            }
-        } else {
-            super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        }
-
-    }*/
-
-
 
     @SuppressLint("Range")
     private fun getContacts() {

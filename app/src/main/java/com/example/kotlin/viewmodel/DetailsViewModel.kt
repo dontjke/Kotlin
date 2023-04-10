@@ -10,7 +10,6 @@ class DetailsViewModel(
     private val repositoryAdd: DetailsRepositoryAdd = DetailsRepositoryRoomImpl()
 ) : ViewModel() {
 
-
     fun getLiveData() = liveData
 
     fun getWeather(city: City) {
