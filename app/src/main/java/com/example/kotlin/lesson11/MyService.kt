@@ -41,16 +41,6 @@ class MyService : FirebaseMessagingService() {
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-
-        //val intent = Intent(applicationContext, MainActivity::class.java)
-       // val contentIntent = PendingIntent.getActivity(this,0,intent,PendingIntent.FLAG_UPDATE_CURRENT)
-
-        /*val notificationBuilderLow = NotificationCompat.Builder(this, CHANNEL_LOW).apply {
-            setSmallIcon(R.drawable.ic_map_pin)
-            setContentTitle(getString(R.string.notification_title_low))
-            setContentText(getString(R.string.notification_text_low))
-            priority = NotificationManager.IMPORTANCE_LOW
-        }*/
         val notificationBuilderHigh = NotificationCompat.Builder(this, CHANNEL_HIGH).apply {
             setSmallIcon(R.drawable.ic_map_marker)
             setContentTitle(title)
@@ -58,18 +48,6 @@ class MyService : FirebaseMessagingService() {
            // setContentIntent(contentIntent)
             priority = NotificationManager.IMPORTANCE_HIGH
         }
-
-
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){ //каналы
-            val channelNameLow = "Name $CHANNEL_LOW"
-            val channelDescriptionLow = "Description $CHANNEL_LOW"
-            val channelPriorityLow = NotificationManager.IMPORTANCE_LOW
-            val channelLow = NotificationChannel(CHANNEL_LOW,channelNameLow,channelPriorityLow).apply {
-                description = channelDescriptionLow
-            }
-            notificationManager.createNotificationChannel(channelLow)
-        }
-        notificationManager.notify(NOTIFICATION_LOW,notificationBuilderLow.build())*/
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channelNameHigh = "Name $CHANNEL_HIGH"
@@ -83,7 +61,6 @@ class MyService : FirebaseMessagingService() {
         }
         notificationManager.notify(NOTIFICATION_HIGH, notificationBuilderHigh.build())
     }
-
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)

@@ -28,8 +28,6 @@ import com.example.kotlin.view.weatherlist.WeatherListFragment
 import okhttp3.internal.notify
 
 class MainActivity : AppCompatActivity() {
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -45,11 +43,8 @@ class MainActivity : AppCompatActivity() {
             putExtra(KEY_BUNDLE_ACTIVITY_MESSAGE, "привет сервис")
         })
 
-
         val receiver = MyBroadcastReceiver() //создали приемник
         registerReceiver(receiver, IntentFilter(KEY_VIBE)) //волна
-        // registerReceiver(receiver, IntentFilter("android.intent.action.AIRPLANE_MODE"))   //для дз
-        //LocalBroadcastManager.getInstance(this).registerReceiver(receiver, IntentFilter("myaction"))
 
         val sp = getSharedPreferences(KEY_SP_FILE_NAME_1, Context.MODE_PRIVATE)
         val editor = sp.edit()
@@ -65,9 +60,6 @@ class MainActivity : AppCompatActivity() {
         Thread {
             MyApp.getHistoryDao().getAll()
         }.start()
-
-
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
