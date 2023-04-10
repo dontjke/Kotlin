@@ -1,12 +1,17 @@
 package com.example.kotlin.view
 
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import androidx.appcompat.app.AppCompatActivity
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
 import com.example.kotlin.MyApp
 import com.example.kotlin.R
 import com.example.kotlin.lesson10.MapsFragment
@@ -15,11 +20,12 @@ import com.example.kotlin.lesson6.MyBroadcastReceiver
 import com.example.kotlin.lesson6.ThreadsFragment
 import com.example.kotlin.lesson9.WorkWithContentProviderFragment
 import com.example.kotlin.utils.KEY_BUNDLE_ACTIVITY_MESSAGE
-import com.example.kotlin.utils.KEY_SP_FILE_NAME_1_KEY_IS_RUSSIAN
 import com.example.kotlin.utils.KEY_SP_FILE_NAME_1
+import com.example.kotlin.utils.KEY_SP_FILE_NAME_1_KEY_IS_RUSSIAN
 import com.example.kotlin.utils.KEY_VIBE
 import com.example.kotlin.view.weatherlist.HistoryWeatherListFragment
 import com.example.kotlin.view.weatherlist.WeatherListFragment
+import okhttp3.internal.notify
 
 class MainActivity : AppCompatActivity() {
 
@@ -59,6 +65,8 @@ class MainActivity : AppCompatActivity() {
         Thread {
             MyApp.getHistoryDao().getAll()
         }.start()
+
+
 
     }
 

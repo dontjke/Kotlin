@@ -41,6 +41,10 @@
     <string name="button_search_map">Search</string>
     <string name="marker_start">Start</string>
     <string name="address_hint">введите адресс</string>
+    <string name="notification_title_low">Title low</string>
+    <string name="notification_text_low" translatable="false">Text low</string>
+    <string name="notification_title_high" translatable="false">Title high</string>
+    <string name="notification_text_high" translatable="false">Text high</string>
 
 
 </resources>
