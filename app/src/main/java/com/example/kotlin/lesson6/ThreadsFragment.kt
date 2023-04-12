@@ -47,11 +47,9 @@ class ThreadsFragment : Fragment() {
                     requireActivity().runOnUiThread {
                         threadsTextView.text = "$time секунд"
                         createTextView("${Thread.currentThread().name} ${++counter}")
-                    } //вынес в UI Thread
-                    //Handler(Looper.getMainLooper()).post { threadsTextView.text = "Плотно поработали ${time} секунд" }   // то же самое
+                    }
                 }.start()
             }
-            //вечный поток
             serviceButton2.setOnClickListener {
                 myThreads.mHandler?.post {
 

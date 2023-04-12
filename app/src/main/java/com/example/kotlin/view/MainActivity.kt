@@ -16,8 +16,8 @@ import com.example.kotlin.lesson6.MyBroadcastReceiver
 import com.example.kotlin.lesson6.ThreadsFragment
 import com.example.kotlin.lesson9.WorkWithContentProviderFragment
 import com.example.kotlin.utils.KEY_BUNDLE_ACTIVITY_MESSAGE
-import com.example.kotlin.utils.KEY_SP_FILE_NAME_1
-import com.example.kotlin.utils.KEY_SP_FILE_NAME_1_KEY_IS_RUSSIAN
+import com.example.kotlin.utils.KEY_SHARED_PREFERENCES_FILE_NAME_1
+import com.example.kotlin.utils.KEY_SHARED_PREFERENCES_FILE_NAME_1_KEY_IS_RUSSIAN
 import com.example.kotlin.utils.KEY_VIBE
 import com.example.kotlin.view.weatherlist.HistoryWeatherListFragment
 import com.example.kotlin.view.weatherlist.WeatherListFragment
@@ -41,16 +41,16 @@ class MainActivity : AppCompatActivity() {
         val receiver = MyBroadcastReceiver() //создали приемник
         registerReceiver(receiver, IntentFilter(KEY_VIBE)) //волна
 
-        val sp = getSharedPreferences(KEY_SP_FILE_NAME_1, Context.MODE_PRIVATE)
+        val sp = getSharedPreferences(KEY_SHARED_PREFERENCES_FILE_NAME_1, Context.MODE_PRIVATE)
         val editor = sp.edit()
         editor.putBoolean(
-            KEY_SP_FILE_NAME_1_KEY_IS_RUSSIAN,
+            KEY_SHARED_PREFERENCES_FILE_NAME_1_KEY_IS_RUSSIAN,
             true
         ) // сохраняем в SP состояние кнопки локации Россия/мир
         editor.apply()
 
         val defaultValueIsRussian = true
-        sp.getBoolean(KEY_SP_FILE_NAME_1_KEY_IS_RUSSIAN, defaultValueIsRussian)
+        sp.getBoolean(KEY_SHARED_PREFERENCES_FILE_NAME_1_KEY_IS_RUSSIAN, defaultValueIsRussian)
 
         Thread {
             MyApp.getHistoryDao().getAll()

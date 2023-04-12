@@ -117,9 +117,13 @@ class MapsFragment : Fragment() {
                     location.latitude,
                     location.longitude,
                     1000000
-                )!![0].getAddressLine(0) //можно что-то другое округ страна город
+                )?.get(0)?.getAddressLine(0) //можно что-то другое округ страна город
             requireActivity().runOnUiThread { //перенес в главный поток
-                showAddressDialog(addressText, location)
+                if (addressText != null) {
+                    showAddressDialog(addressText, location)
+                } else{
+                    Snackbar.make(binding.root,"адресс недоступен",Snackbar.LENGTH_LONG).show()
+                }
             }
         }.start()
     }
@@ -158,13 +162,11 @@ class MapsFragment : Fragment() {
             .commit()
     }
 
-
     private fun isPermissionGranted(): Boolean {
         return ContextCompat.checkSelfPermission(
             requireContext(),
             Manifest.permission.ACCESS_FINE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
-
     }
 
     @SuppressLint("MissingPermission")
@@ -176,11 +178,6 @@ class MapsFragment : Fragment() {
 
         } else {
             mRequestPermissionFineLocation()
-            /*  ActivityCompat.requestPermissions(
-                  requireActivity(),
-                  arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                  REQUEST_LOCATION_PERMISSION
-              )*/
         }
     }
 
