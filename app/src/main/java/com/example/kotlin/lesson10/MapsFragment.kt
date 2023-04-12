@@ -6,7 +6,6 @@ import android.app.AlertDialog
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.location.Geocoder
-import android.location.Location
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -79,22 +78,12 @@ class MapsFragment : Fragment() {
         )!!
     }
 
-
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
     }
 
     private val callback = OnMapReadyCallback { googleMap ->
-        /**
-         * Manipulates the map once available.
-         * This callback is triggered when the map is ready to be used.
-         * This is where we can add markers or lines, add listeners or move the camera.
-         * In this case, we just add a marker near Sydney, Australia.
-         * If Google Play services is not installed on the device, the user will be prompted to
-         * install it inside the SupportMapFragment. This method will only be triggered once the
-         * user has installed Google Play services and returned to the app.
-         */
         map = googleMap
         val moscow = LatLng(55.0, 37.0)
         map.addMarker(MarkerOptions().position(moscow).title("Marker in Moscow"))
@@ -119,7 +108,8 @@ class MapsFragment : Fragment() {
     }
 
     private fun getAddressByLocation(location: LatLng) {
-        val geocoder = Geocoder(requireContext())  // , Locale.getDefault() дефолтный язык на устройстве
+        val geocoder =
+            Geocoder(requireContext())  // , Locale.getDefault() дефолтный язык на устройстве
 
         Thread {
             val addressText =
@@ -127,9 +117,13 @@ class MapsFragment : Fragment() {
                     location.latitude,
                     location.longitude,
                     1000000
-                )!![0].getAddressLine(0) //можно что-то другое округ страна город
-            requireActivity().runOnUiThread{ //перенес в главный поток
-                showAddressDialog(addressText, location)
+                )?.get(0)?.getAddressLine(0) //можно что-то другое округ страна город
+            requireActivity().runOnUiThread { //перенес в главный поток
+                if (addressText != null) {
+                    showAddressDialog(addressText, location)
+                } else{
+                    Snackbar.make(binding.root,"адресс недоступен",Snackbar.LENGTH_LONG).show()
+                }
             }
         }.start()
     }
@@ -157,7 +151,8 @@ class MapsFragment : Fragment() {
                 .show()
         }
     }
-     private fun onItemClick(weather: Weather) {
+
+    private fun onItemClick(weather: Weather) {
         requireActivity().supportFragmentManager
             .beginTransaction()
             .add(R.id.container, DetailsFragment.newInstance(Bundle().apply {
@@ -167,13 +162,11 @@ class MapsFragment : Fragment() {
             .commit()
     }
 
-
     private fun isPermissionGranted(): Boolean {
         return ContextCompat.checkSelfPermission(
             requireContext(),
             Manifest.permission.ACCESS_FINE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
-
     }
 
     @SuppressLint("MissingPermission")
@@ -185,11 +178,6 @@ class MapsFragment : Fragment() {
 
         } else {
             mRequestPermissionFineLocation()
-            /*  ActivityCompat.requestPermissions(
-                  requireActivity(),
-                  arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                  REQUEST_LOCATION_PERMISSION
-              )*/
         }
     }
 
@@ -204,7 +192,6 @@ class MapsFragment : Fragment() {
             mapFragment?.getMapAsync(callback)
 
         }
-
 
     override fun onCreateView(
         inflater: LayoutInflater,

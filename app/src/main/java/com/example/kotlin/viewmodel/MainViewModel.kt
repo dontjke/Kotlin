@@ -15,7 +15,6 @@ class MainViewModel(
         return liveData
     }
 
-
     fun getWeatherRussia() = getWeather(true)
     fun getWeatherWorld() = getWeather(false)
     private fun getWeather(isRussian: Boolean) {
@@ -29,6 +28,5 @@ class MainViewModel(
                 liveData.postValue(AppState.Error(IllegalAccessException()))
             }
         }.start()
-
     }
 }

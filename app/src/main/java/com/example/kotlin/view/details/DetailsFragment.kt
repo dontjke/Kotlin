@@ -10,7 +10,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import coil.load
 import com.example.kotlin.databinding.FragmentDetailsBinding
-import com.example.kotlin.lesson10.MapsFragment
 import com.example.kotlin.repository.Weather
 import com.example.kotlin.utils.KEY_BUNDLE_WEATHER
 import com.example.kotlin.utils.loadSvg
@@ -30,21 +29,8 @@ class DetailsFragment : Fragment()/*, OnServerResponse, OnServerResponseListener
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
-        /*LocalBroadcastManager.getInstance(requireContext())
-            .unregisterReceiver(receiver) //уничтожаем ресивер*/
     }
 
-
-    /*private val receiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            intent?.let { intent ->
-                intent.getParcelableExtra<WeatherDTO>(KEY_BUNDLE_SERVICE_BROADCAST_WEATHER)?.let {
-                    onResponse(it)
-                }
-            }
-        }
-    }
-*/
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -57,12 +43,8 @@ class DetailsFragment : Fragment()/*, OnServerResponse, OnServerResponseListener
         ViewModelProvider(this).get(DetailsViewModel::class.java)
     }
 
-    //lateinit var currentCityName: String
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        /*LocalBroadcastManager.getInstance(requireContext())  //локальный приемник
-            .registerReceiver(receiver, IntentFilter(KEY_WAVE_SERVICE_BROADCAST))*/
 
         viewModel.getLiveData().observe(
             viewLifecycleOwner,
@@ -75,8 +57,6 @@ class DetailsFragment : Fragment()/*, OnServerResponse, OnServerResponseListener
 
         arguments?.getParcelable<Weather>(KEY_BUNDLE_WEATHER)?.let {
             viewModel.getWeather(it.city)
-            // currentCityName = it.city.name
-            //(it.city.lat, it.city.lon)
         }
     }
 
@@ -97,26 +77,16 @@ class DetailsFragment : Fragment()/*, OnServerResponse, OnServerResponseListener
                     cityCoordinates.text = "${weather.city.lat} ${weather.city.lon}"
                     showSnackBar("Получилось", mainView)
 
-                    /*Glide.with(requireContext())
-                        .load("https://freepngimg.com/thumb/city/36275-3-city-hd.png")
-                        .into(headerIcon)*/
-
-                    /*Picasso.get()?.load("https://freepngimg.com/thumb/city/36275-3-city-hd.png")
-                        ?.into(headerIcon)*/
-
                     headerCityIcon.load("https://freepngimg.com/thumb/city/36275-3-city-hd.png")//coil
 
                     icon.loadSvg("https://yastatic.net/weather/i/icons/blueye/color/svg/${weather.icon}.svg")
                 }
             }
-            // Snackbar.make(binding.mainView, "Получилось", Snackbar.LENGTH_LONG).show()
         }
     }
 
-
     private fun showSnackBar(string: String, view: View) =
         make(view, string, Snackbar.LENGTH_LONG).show()
-
 
     companion object {
         @JvmStatic
@@ -126,16 +96,5 @@ class DetailsFragment : Fragment()/*, OnServerResponse, OnServerResponseListener
             return fragment
         }
 
-
     }
-
-
-
-    /*override fun onResponse(weatherDTO: WeatherDTO) {
-        renderData(weatherDTO)
-    }*/
-
-    /*override fun onError(error: ResponseState) {
-        //TODO выводим ошибку
-    }*/
 }

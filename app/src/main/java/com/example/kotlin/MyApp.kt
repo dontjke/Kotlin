@@ -17,14 +17,12 @@ class MyApp : Application() {
         private var dataBase: MyDataBase? = null
         private var appContext: MyApp? = null
 
-
         fun getHistoryDao(): HistoryDao {
             if (dataBase == null) {
                 if (appContext != null) {
 
                     dataBase =
                         Room.databaseBuilder(appContext!!, MyDataBase::class.java, "test")
-                            //.allowMainThreadQueries()
                             .addMigrations(migration_1_2)
                             .build()
 
@@ -39,7 +37,6 @@ class MyApp : Application() {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL("ALTER TABLE history_table ADD column condition TEXT NOT NULL DEFAULT ''")
             }
-
         }
     }
 }

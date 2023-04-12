@@ -5,9 +5,7 @@ class RepositoryImpl : Repository {
         Thread.sleep(2000) //эмуляция сетевого запроса
         return Weather()
     }
-
     override fun getWeatherFromLocalStorageRus() = getRussianCities() // эмуляция ответа
-
 
     override fun getWeatherFromLocalStorageWorld() = getWorldCities() // эмуляция ответа
 }

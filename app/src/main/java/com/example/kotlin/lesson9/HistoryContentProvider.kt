@@ -7,7 +7,6 @@ import android.content.UriMatcher
 import android.database.Cursor
 import android.net.Uri
 import com.example.kotlin.MyApp.Companion.getHistoryDao
-import com.example.kotlin.R
 import com.example.kotlin.domian.room.*
 
 private const val URI_ALL = 1 // URI для всех записей
@@ -97,7 +96,6 @@ class HistoryContentProvider : ContentProvider() {
             resultUri
         }
     }
-
 
     override fun delete(uri: Uri, selection: String?, selectionArgs: Array<out String>?): Int {
         require(uriMatcher.match(uri) == URI_ID) { "Wrong URI: $uri" }
